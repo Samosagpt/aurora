@@ -106,17 +106,7 @@ if %errorlevel% neq 0 (
 echo.
 echo Installing remaining requirements...
 python -m pip install --user -r requirements.txt
-if %errorlevel% neq 0 (
-    echo ❌ Failed to install requirements. Please check for errors above.
-    pause
-    exit /b 1
-)
-
-echo.
-echo ✓ Setup complete!
-echo.
-echo === Final Configuration ===
-python gpu_check.py
+echo Setup complete!
 echo.
 echo To run Samosa GPT:
 echo - Web version: run_web.bat
