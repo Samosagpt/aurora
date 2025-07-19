@@ -79,7 +79,7 @@ if %gpu_check% equ 1 (
 
 :install_pytorch_cuda
 echo Installing PyTorch with CUDA 12.1 support...
-python -m pip install --user torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+python -m pip install --user torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu128
 goto verify_pytorch
 
 :install_pytorch_cpu
