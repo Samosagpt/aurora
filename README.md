@@ -42,8 +42,8 @@ Samosa GPT is a comprehensive AI assistant that combines text, voice, and image 
 
 1. **Clone the Repository**
    ```bash
-   git clone https://github.com/Samosagpt/samosa.git
-   cd samosa
+   git clone https://github.com/Samosagpt/samosagpt.git
+   cd samosagpt
    ```
 
 2. **Run Setup Script**
@@ -106,20 +106,6 @@ python app.py --mode web --debug
 ```
 Enable detailed logging and debugging
 
-## 📦 Building Executable
-
-### Windows
-```bash
-build.bat
-```
-
-### Linux/macOS
-```bash
-bash build.sh
-```
-
-The executable will be created in the `dist/` directory and can be run without Python installation.
-
 ## 🎨 Image Generation
 
 Samosa GPT includes a powerful image generation module with multiple models:
@@ -155,25 +141,6 @@ Samosa GPT includes a powerful image generation module with multiple models:
 - **Multiple Voices**: Various voice presets available
 - **Fallback Support**: pyttsx3 backup for compatibility
 - **Audio Export**: Save generated speech as audio files
-
-## � Smart Features
-
-### Intent Detection
-Automatically recognizes and routes different types of queries:
-- Wikipedia searches
-- Web searches (Google, YouTube)
-- Weather requests
-- News updates
-- General AI conversations
-
-### Example Commands
-```
-"wikipedia artificial intelligence"
-"weather in London"
-"search youtube for python tutorials"
-"latest news"
-"What is machine learning?"
-```
 
 ## ⚙️ Configuration
 
@@ -305,13 +272,6 @@ python -c "import sounddevice; print(sounddevice.query_devices())"
 pip install -r requirements.txt --force-reinstall
 ```
 
-**Build Issues**
-```bash
-# Clean build
-rm -rf build/ dist/
-python setup.py
-```
-
 ## 🤝 Contributing
 
 1. Fork the repository
@@ -347,10 +307,10 @@ This software includes third-party components with their own licenses. Please re
 
 ## 📞 Support
 
-- 🐛 Issues: [GitHub Issues](https://github.com/yourusername/samosa/issues)
-- 💬 Discussions: [GitHub Discussions](https://github.com/yourusername/samosa/discussions)
-- 📧 Email: your-email@example.com
+- 🐛 Issues: [GitHub Issues](https://github.com/Samosagpt/samosagpt/issues)
+- 💬 Discussions: [GitHub Discussions](https://github.com/Samosagpt/samosagpt/discussions)
+- 📧 Email: psntejaji@gmail.com
 
 ---
 
-**Made with ❤️ by the Samosa GPT Team**
+**Made with ❤️ by the P.S.N Tejaji**
