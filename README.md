@@ -320,9 +320,22 @@ python setup.py
 4. Add tests for new functionality
 5. Submit a pull request
 
-## � License
+## 📄 License
 
-This project is licensed under the Apache License 2.0. See [LICENSE](LICENSE) for details.
+This project is licensed under the **Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License (CC BY-NC-ND 4.0)**.
+
+### You are free to:
+- **Share** — copy and redistribute the material in any medium or format
+
+### Under the following terms:
+- **Attribution** — You must give appropriate credit, provide a link to the license, and indicate if changes were made
+- **NonCommercial** — You may not use the material for commercial purposes
+- **NoDerivatives** — If you remix, transform, or build upon the material, you may not distribute the modified material
+
+For the full license text, see [LICENSE](LICENSE) or visit [https://creativecommons.org/licenses/by-nc-nd/4.0/](https://creativecommons.org/licenses/by-nc-nd/4.0/)
+
+### Third-Party Components
+This software includes third-party components with their own licenses. Please refer to individual component documentation for their terms and conditions.
 
 ## 🙏 Acknowledgments
 
