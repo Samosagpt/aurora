@@ -37,6 +37,10 @@ Samosa GPT is a comprehensive AI assistant that combines text, voice, and image 
 - Python 3.8 or higher
 - [Ollama](https://ollama.ai/) (for AI chat functionality)
 - Git (for cloning the repository)
+- **GPU Support (Optional but Recommended)**:
+  - NVIDIA GPU with CUDA support for accelerated AI processing
+  - AMD GPU with ROCm support (limited compatibility)
+  - CPU-only operation is supported but slower
 
 ### 🔧 Installation
 
@@ -46,16 +50,32 @@ Samosa GPT is a comprehensive AI assistant that combines text, voice, and image 
    cd samosa
    ```
 
-2. **Run Setup Script**
+2. **Run Smart Setup Script**
    ```bash
-   python setup.py
+   setup_smart.bat  # Windows - Enhanced PowerShell setup (recommended)
+   setup.bat        # Windows - Basic batch setup
    ```
-   This will automatically:
+   The setup script will automatically:
    - Check Python version compatibility
-   - Install all required dependencies
+   - **Detect your GPU hardware (NVIDIA/AMD/CPU-only)**
+   - **Install appropriate PyTorch version with CUDA/ROCm/CPU support**
+   - **Prompt for CUDA installation if NVIDIA GPU detected but CUDA missing**
+   - Install all other required dependencies
    - Set up environment files
    - Create necessary directories
-   - Test the installation
+   - Verify the installation
+
+3. **Check GPU Configuration (Optional)**
+   ```bash
+   check_gpu.bat  # Windows - Check your GPU and CUDA setup
+   python gpu_check.py  # Cross-platform detailed GPU analysis
+   ```
+
+4. **Manual CUDA Installation (If Needed)**
+   If you have an NVIDIA GPU but the setup detects missing CUDA:
+   - Download CUDA Toolkit from: https://developer.nvidia.com/cuda-downloads
+   - Install CUDA Toolkit
+   - Re-run `setup.bat` to install CUDA-enabled PyTorch
 
 3. **Configure Environment (Optional)**
    ```bash
