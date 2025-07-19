@@ -1,0 +1,117 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+/* Use Streamlit's default colors and backgrounds */
+.streamlit-select {
+  background-color: var(--background-color, rgb(255, 255, 255));
+  border-color: var(--border-color, rgb(204, 204, 204));
+  color: var(--text-color, rgb(38, 39, 48));
+}
+
+.streamlit-select:hover {
+  border-color: var(--primary-color, rgb(255, 75, 75));
+}
+
+.streamlit-select:focus {
+  border-color: var(--primary-color, rgb(255, 75, 75));
+  box-shadow: 0 0 0 0.2rem var(--primary-color-alpha, rgba(255, 75, 75, 0.25));
+}
+
+.streamlit-select-dropdown {
+  background-color: var(--background-color, rgb(255, 255, 255));
+  border-color: var(--border-color, rgb(204, 204, 204));
+  color: var(--text-color, rgb(38, 39, 48));
+  scrollbar-width: auto;
+  scrollbar-color: rgba(38, 39, 48, 0.1) rgba(38, 39, 48, 0.1);
+}
+
+.streamlit-select-option {
+  color: var(--text-color, rgb(38, 39, 48));
+}
+
+.streamlit-select-option:hover {
+  background-color: var(--secondary-background-color, rgb(246, 248, 251));
+}
+
+.streamlit-select-option.selected {
+  background-color: var(--primary-background-color, rgba(255, 75, 75, 0.1));
+  color: var(--primary-color, rgb(255, 75, 75));
+}
+
+/* Dark theme support */
+[data-theme="dark"] .streamlit-select {
+  background-color: var(--background-color, #262730);
+  border-color: var(--border-color, rgb(77, 81, 86));
+  color: var(--text-color, rgb(250, 250, 250));
+}
+
+[data-theme="dark"] .streamlit-select-dropdown {
+  background-color: var(--background-color, #262730);
+  border-color: var(--border-color, rgb(77, 81, 86));
+  color: var(--text-color, rgb(250, 250, 250));
+}
+
+[data-theme="dark"] .streamlit-select-option:hover {
+  background-color: var(--secondary-background-color, #1c1c22);
+}
+
+/* Model management button styles */
+.model-install-button {
+  background-color: #4CAF50 !important;
+  color: white !important;
+  border: none !important;
+  padding: 4px 8px !important;
+  border-radius: 4px !important;
+  font-size: 12px !important;
+  cursor: pointer !important;
+  transition: background-color 0.2s !important;
+}
+
+.model-install-button:hover {
+  background-color: #45a049 !important;
+}
+
+.model-delete-button {
+  background-color: #f44336 !important;
+  color: white !important;
+  border: none !important;
+  padding: 4px 8px !important;
+  border-radius: 4px !important;
+  font-size: 12px !important;
+  cursor: pointer !important;
+  transition: background-color 0.2s !important;
+}
+
+.model-delete-button:hover {
+  background-color: #da190b !important;
+}
+
+.model-browse-button {
+  background-color: #2196F3 !important;
+  color: white !important;
+  border: none !important;
+  padding: 4px 8px !important;
+  border-radius: 4px !important;
+  font-size: 12px !important;
+  cursor: pointer !important;
+  transition: background-color 0.2s !important;
+}
+
+.model-browse-button:hover {
+  background-color: #0b7dda !important;
+}

@@ -1,0 +1,136 @@
+# Python cache files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments and environment files
+.env
+.env.local
+.env.*.local
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Node.js dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Audio/media files
+*.wav
+*.mp3
+*.mp4
+*.avi
+*.mov
+*.flv
+*.wmv
+
+# Temporary files
+*.tmp
+*.temp
+temp/
+tmp/
+
+# Model files (large)
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+*.bin
+*.h5
+
+# Log files (keep structure but not content)
+logs/
+*.log
+*.log.*
+
+# Streamlit cache and session state
+.streamlit/
+streamlit_cache/
+
+# Jupyter notebooks
+.ipynb_checkpoints/
+*.ipynb
+
+# PyInstaller
+*.manifest
+*.spec
+build/
+dist/
+
+# Coverage reports
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# AI/ML specific
+wandb/
+.neptune/
+mlruns/
+.mlflow/
+
+# Frontend build artifacts
+/streamlit_markdown_select/frontend/build/
+/streamlit_markdown_select/frontend/dist/
+/streamlit_markdown_select/frontend/.cache/
+
+# Conversation and session data
+conversation_log.json
+conversation_log.json.backup
+assistant_log.md
