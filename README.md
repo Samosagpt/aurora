@@ -78,8 +78,6 @@ Samosa GPT is a comprehensive AI assistant that combines text, voice, and image 
 5. **Install Bark TTS (Optional)**
    ```bash
    # For high-quality text-to-speech
-   python install_bark.py
-   # Or manually:
    pip install git+https://github.com/suno-ai/bark.git
    ```
 
@@ -87,27 +85,21 @@ Samosa GPT is a comprehensive AI assistant that combines text, voice, and image 
 
 #### Web Interface (Recommended)
 ```bash
-python app.py --mode web
+start run_web.bat
 ```
 Opens a modern web interface at `http://localhost:8501`
 
 #### Command Line Interface
 ```bash
-python app.py --mode cli
+start run_console.bat
 ```
 Text-based interaction in terminal
 
 #### Voice Mode
 ```bash
-python app.py --mode voice
+start run_console.bat
 ```
 Hands-free voice commands and responses
-
-#### Debug Mode
-```bash
-python app.py --mode web --debug
-```
-Enable detailed logging and debugging
 
 ## 🎨 Image Generation
 
