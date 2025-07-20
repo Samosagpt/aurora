@@ -1,8 +1,11 @@
 # 🤖 Samosa GPT: Advanced AI Assistant with Multi-Modal Capabilities
 
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
-[![License](https://img.shields.io/badge/license-Apache%202.0-green.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-3.5.0-brightgreen.svg)](https://github.com/Samosagpt/samosa)
+[![Version](https://img.shields.io/badge/version-1.0.0.0--pre-brightgreen.svg)](https://github.com/Samosagpt/samosa)
+[![License: CC BY-NC-ND 4.0](https://img.shields.io/badge/License-CC%20BY--NC--ND%204.0-green.svg)](LICENSE)
+[![License: CC BY-NC-ND 4.0](https://licensebuttons.net/l/by-nc-nd/4.0/80x15.png)](LICENSE)
+
+
 
 ## 🌟 Overview
 
@@ -38,12 +41,15 @@ Samosa GPT is a comprehensive AI assistant that combines text, voice, and image 
 - [Ollama](https://ollama.ai/) (for AI chat functionality)
 - Git (for cloning the repository)
 
+> [!TIP]  
+> Refer to, our detailed guide on [SamosaGPT Documentation](https://samosagpt.vercel.app/docs#installation) for more info.
+
 ### 🔧 Installation
 
 1. **Clone the Repository**
    ```bash
-   git clone https://github.com/Samosagpt/samosa.git
-   cd samosa
+   git clone https://github.com/Samosagpt/samosagpt.git
+   cd samosagpt
    ```
 
 2. **Run Setup Script**
@@ -75,8 +81,6 @@ Samosa GPT is a comprehensive AI assistant that combines text, voice, and image 
 5. **Install Bark TTS (Optional)**
    ```bash
    # For high-quality text-to-speech
-   python install_bark.py
-   # Or manually:
    pip install git+https://github.com/suno-ai/bark.git
    ```
 
@@ -84,41 +88,21 @@ Samosa GPT is a comprehensive AI assistant that combines text, voice, and image 
 
 #### Web Interface (Recommended)
 ```bash
-python app.py --mode web
+start run_web.bat
 ```
 Opens a modern web interface at `http://localhost:8501`
 
 #### Command Line Interface
 ```bash
-python app.py --mode cli
+start run_console.bat
 ```
 Text-based interaction in terminal
 
 #### Voice Mode
 ```bash
-python app.py --mode voice
+start run_console.bat
 ```
 Hands-free voice commands and responses
-
-#### Debug Mode
-```bash
-python app.py --mode web --debug
-```
-Enable detailed logging and debugging
-
-## 📦 Building Executable
-
-### Windows
-```bash
-build.bat
-```
-
-### Linux/macOS
-```bash
-bash build.sh
-```
-
-The executable will be created in the `dist/` directory and can be run without Python installation.
 
 ## 🎨 Image Generation
 
@@ -155,25 +139,6 @@ Samosa GPT includes a powerful image generation module with multiple models:
 - **Multiple Voices**: Various voice presets available
 - **Fallback Support**: pyttsx3 backup for compatibility
 - **Audio Export**: Save generated speech as audio files
-
-## � Smart Features
-
-### Intent Detection
-Automatically recognizes and routes different types of queries:
-- Wikipedia searches
-- Web searches (Google, YouTube)
-- Weather requests
-- News updates
-- General AI conversations
-
-### Example Commands
-```
-"wikipedia artificial intelligence"
-"weather in London"
-"search youtube for python tutorials"
-"latest news"
-"What is machine learning?"
-```
 
 ## ⚙️ Configuration
 
@@ -305,13 +270,6 @@ python -c "import sounddevice; print(sounddevice.query_devices())"
 pip install -r requirements.txt --force-reinstall
 ```
 
-**Build Issues**
-```bash
-# Clean build
-rm -rf build/ dist/
-python setup.py
-```
-
 ## 🤝 Contributing
 
 1. Fork the repository
@@ -320,9 +278,22 @@ python setup.py
 4. Add tests for new functionality
 5. Submit a pull request
 
-## � License
+## 📄 License
 
-This project is licensed under the Apache License 2.0. See [LICENSE](LICENSE) for details.
+This project is licensed under the **Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License (CC BY-NC-ND 4.0)**.
+
+### You are free to:
+- **Share** — copy and redistribute the material in any medium or format
+
+### Under the following terms:
+- **Attribution** — You must give appropriate credit, provide a link to the license, and indicate if changes were made
+- **NonCommercial** — You may not use the material for commercial purposes
+- **NoDerivatives** — If you remix, transform, or build upon the material, you may not distribute the modified material
+
+For the full license text, see [LICENSE](LICENSE) or visit [https://creativecommons.org/licenses/by-nc-nd/4.0/](https://creativecommons.org/licenses/by-nc-nd/4.0/)
+
+### Third-Party Components
+This software includes third-party components with their own licenses. Please refer to individual component documentation for their terms and conditions.
 
 ## 🙏 Acknowledgments
 
@@ -334,10 +305,10 @@ This project is licensed under the Apache License 2.0. See [LICENSE](LICENSE) fo
 
 ## 📞 Support
 
-- 🐛 Issues: [GitHub Issues](https://github.com/yourusername/samosa/issues)
-- 💬 Discussions: [GitHub Discussions](https://github.com/yourusername/samosa/discussions)
-- 📧 Email: your-email@example.com
+- 🐛 Issues: [GitHub Issues](https://github.com/Samosagpt/samosagpt/issues)
+- 💬 Discussions: [GitHub Discussions](https://github.com/Samosagpt/samosagpt/discussions)
+- 📧 Email: psntejaji@gmail.com
 
 ---
 
-**Made with ❤️ by the Samosa GPT Team**
+**Made with ❤️ by the P.S.N Tejaji**
