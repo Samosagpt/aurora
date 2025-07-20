@@ -1,7 +1,7 @@
 # 🤖 Samosa GPT: Advanced AI Assistant with Multi-Modal Capabilities
 
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
-[![Version](https://img.shields.io/badge/version-1.0.0.0-brightgreen.svg)](https://github.com/Samosagpt/samosa)
+[![Version](https://img.shields.io/badge/version-1.0.0.0--pre-brightgreen.svg)](https://github.com/Samosagpt/samosa)
 [![License: CC BY-NC-ND 4.0](https://img.shields.io/badge/License-CC%20BY--NC--ND%204.0-green.svg)](LICENSE)
 [![License: CC BY-NC-ND 4.0](https://licensebuttons.net/l/by-nc-nd/4.0/80x15.png)](LICENSE)
 
