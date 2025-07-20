@@ -44,6 +44,7 @@ from offline_text2speech import speak_text
 import logmanagement as lm
 from user_preferences import get_preferences_manager
 from streamlit_markdown_select import markdown_select, create_option
+from streamlit_navbar import navbar, create_nav_item
 
 # Set up logging
 logger = logging.getLogger(__name__)
@@ -148,6 +149,34 @@ def inject_css():
             
             details[open] summary {
                 margin-bottom: 10px; 
+            }
+            
+            /* Navbar component integration */
+            .stApp > header {
+                background-color: transparent;
+                height: 0px;
+            }
+            
+            /* Adjust main content to account for navbar */
+            .main .block-container {
+                padding-top: 1rem;
+            }
+            
+            /* Ensure navbar component has proper z-index and styling */
+            iframe[title="streamlit_navbar.navbar"] {
+                position: sticky !important;
+                top: 0 !important;
+                z-index: 999 !important;
+                height: 80px !important;
+                border: none !important;
+                width: 100% !important;
+                background: var(--background-color, white) !important;
+                box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24) !important;
+            }
+            
+            /* Smooth integration with main content */
+            .main .block-container {
+                margin-top: 0 !important;
             }
             </style>
         """, unsafe_allow_html=True)
@@ -2662,7 +2691,7 @@ def apply_tqdm_patch():
 
 # Main application
 def main():
-    """Main application with sidebar navigation"""
+    """Main application with navbar navigation"""
     # Configure Streamlit first
     configure_streamlit()
     # Inject CSS
@@ -2670,17 +2699,33 @@ def main():
     # Apply tqdm patch
     apply_tqdm_patch()
     
-    # Sidebar navigation
-    st.sidebar.title("🥟 Samosa GPT")
-    st.sidebar.markdown("---")
+    # Create navigation items
+    nav_items = [
+        create_nav_item("chat", "Chat", "💬"),
+        create_nav_item("image", "Image Generation", "🎨"), 
+        create_nav_item("video", "Video Generation", "🎬"),
+        create_nav_item("about", "About", "ℹ️")
+    ]
     
-    # Navigation menu
-    page = st.sidebar.selectbox(
-        "Navigation",
-        ["💬 Chat", "🎨 Image Generation", "🎬 Video Generation", "ℹ️ About"],
-        key="navigation"
+    # Navigation bar at the top
+    selected_page = navbar(
+        items=nav_items,
+        key="main_navbar",
+        selected=st.session_state.get("current_page", "chat")
     )
     
+    # Store current page in session state
+    if selected_page:
+        st.session_state["current_page"] = selected_page
+    
+    # Use stored page or default to chat
+    current_page = st.session_state.get("current_page", "chat")
+    
+    # Add some spacing after navbar for better layout
+    st.markdown("<div style='margin-top: 20px;'></div>", unsafe_allow_html=True)
+    
+    # Sidebar without navigation menu - only quick actions
+    st.sidebar.title("🥟 Samosa GPT")
     st.sidebar.markdown("---")
     st.sidebar.markdown("### 🔧 Quick Actions")
     
@@ -2701,13 +2746,13 @@ def main():
             st.sidebar.text_area("Recent Logs", log_content[-1000:], height=200)
     
     # Route to appropriate page
-    if page == "💬 Chat":
+    if current_page == "chat":
         chat_page()
-    elif page == "🎨 Image Generation":
+    elif current_page == "image":
         image_generation_page()
-    elif page == "🎬 Video Generation":
+    elif current_page == "video":
         video_generation_page()
-    elif page == "ℹ️ About":
+    elif current_page == "about":
         about_page()
 
 # Run the application
