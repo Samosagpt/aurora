@@ -41,6 +41,9 @@ Samosa GPT is a comprehensive AI assistant that combines text, voice, and image 
 - [Ollama](https://ollama.ai/) (for AI chat functionality)
 - Git (for cloning the repository)
 
+> [!TIP]  
+> Refer to, our detailed guide on [SamosaGPT Documentation](https://samosagpt.vercel.app/docs#installation) for more info.
+
 ### 🔧 Installation
 
 1. **Clone the Repository**
