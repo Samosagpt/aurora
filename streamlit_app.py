@@ -1,5 +1,5 @@
 """
-Production-ready Streamlit application for Samosa GPT
+Production-ready Streamlit application for Aurora
 """
 import streamlit as st
 import Generation as gen
@@ -45,6 +45,41 @@ import logmanagement as lm
 from user_preferences import get_preferences_manager
 from streamlit_markdown_select import markdown_select, create_option
 from streamlit_navbar import navbar, create_nav_item
+
+# Import attachment handler
+try:
+    from attachment_handler import attachment_handler
+    ATTACHMENT_HANDLER_AVAILABLE = True
+except ImportError:
+    ATTACHMENT_HANDLER_AVAILABLE = False
+    print("⚠️ Attachment handler not available")
+
+# Import prompt handler for web search, weather, news
+try:
+    from prompthandler import prompt_handler
+    PROMPT_HANDLER_AVAILABLE = True
+    print("✅ Prompt handler loaded (web search, weather, news)")
+except ImportError:
+    PROMPT_HANDLER_AVAILABLE = False
+    print("⚠️ Prompt handler not available")
+
+# Import agentic handler for desktop control
+try:
+    from agentic_handler import agentic_handler, is_desktop_control_request, handle_agentic_request
+    AGENTIC_HANDLER_AVAILABLE = True
+    print("✅ Agentic handler loaded (desktop control)")
+except ImportError:
+    AGENTIC_HANDLER_AVAILABLE = False
+    print("⚠️ Agentic handler not available")
+
+# Import vision agent for autonomous task execution
+try:
+    from vision_agent import execute_autonomous_task, vision_agent
+    VISION_AGENT_AVAILABLE = True
+    print("✅ Vision agent loaded (autonomous task execution)")
+except ImportError:
+    VISION_AGENT_AVAILABLE = False
+    print("⚠️ Vision agent not available")
 
 # Set up logging
 logger = logging.getLogger(__name__)
@@ -93,14 +128,14 @@ def configure_streamlit():
     """Configure Streamlit page settings"""
     try:
         st.set_page_config(
-            page_title="Samosa GPT",
+            page_title="Aurora",
             page_icon="🤖",
             layout="wide",
             initial_sidebar_state="expanded",
             menu_items={
                 'Get Help': None,
                 'Report a bug': None,
-                'About': "# Samosa GPT\nAI Assistant with Multi-Modal Capabilities"
+                'About': "# Aurora\nAI Assistant with Multi-Modal Capabilities"
             }
         )
     except Exception:
@@ -250,6 +285,30 @@ def test_bark_tts():
 def chat_page():
     """Main chat interface"""
     st.title('💬 Chat Assistant')
+    
+    # Agentic mode toggle
+    col_title1, col_title2, col_title3 = st.columns([2, 1, 1])
+    with col_title1:
+        st.write("") # Spacer
+    with col_title2:
+        if AGENTIC_HANDLER_AVAILABLE:
+            agentic_mode = st.toggle("🤖 Basic Agent", value=st.session_state.get("agentic_mode", False), 
+                                    help="Enable basic desktop control", key="agentic_mode_toggle")
+            st.session_state["agentic_mode"] = agentic_mode
+        else:
+            agentic_mode = False
+            st.session_state["agentic_mode"] = False
+    
+    with col_title3:
+        if VISION_AGENT_AVAILABLE:
+            vision_mode = st.toggle("�️ Vision Agent", value=st.session_state.get("vision_mode", False),
+                                   help="Enable autonomous vision-guided control", key="vision_mode_toggle")
+            st.session_state["vision_mode"] = vision_mode
+            if vision_mode:
+                st.success("🚀 Vision Agent active - I can see and control!")
+        else:
+            vision_mode = False
+            st.session_state["vision_mode"] = False
     
     # Get hardware-optimized settings
     if HARDWARE_OPTIMIZER_AVAILABLE:
@@ -459,12 +518,12 @@ def chat_page():
                                 st.error(f"Error installing model: {e}")
             
             # Set model to first available for now
-            model = available_models[0] if available_models else "samosagpt"
+            model = available_models[0] if available_models else "aurora"
         elif actual_selection:
             model = actual_selection
         else:
             # If no model selected, use first available or default
-            model = available_models[0] if available_models else "samosagpt"
+            model = available_models[0] if available_models else "aurora"
         
         # Handle button clicks from component
         component_value = st.session_state.get('chat_model_select')
@@ -556,7 +615,7 @@ def chat_page():
             
     except Exception as e:
         st.error(f"Error selecting model: {e}")
-        model = "samosagpt"
+        model = "aurora"
     
     # Speech and streaming settings with preferences
     col1, col2, col3 = st.columns([2, 1, 1])
@@ -702,7 +761,7 @@ def chat_page():
         lm.append_md_log("rerun")
     
     # Clear history button
-    col1, col2 = st.columns([1, 4])
+    col1, col2, col3 = st.columns([1, 1, 3])
     with col1:
         if st.button("🗑️ Clear History", type="secondary"):
             lm.clear_json_history()
@@ -717,6 +776,20 @@ def chat_page():
                     }
                 ]
             st.rerun()
+    
+    with col2:
+        # Check if current model supports multimodal
+        if ATTACHMENT_HANDLER_AVAILABLE:
+            multimodal_models = attachment_handler.get_multimodal_models()
+            is_multimodal = any(mm in model.lower() for mm in [m.split(':')[0] for m in multimodal_models])
+            
+            if not is_multimodal:
+                if st.button("🔄 Switch to Vision Model", type="primary", help="Current model doesn't support images"):
+                    st.info("💡 To use attachments, install a vision model like llava:")
+                    st.code("ollama pull llava", language="bash")
+            else:
+                st.success("✅ Vision Mode Active")
+
     
     # Show the conversation history
     st.subheader(f"Conversation with {model}", divider="gray")
@@ -751,11 +824,112 @@ def chat_page():
                 except Exception as e:
                     st.error(f"An error occurred: {e}")
     
+    # Attachment section (if supported)
+    if ATTACHMENT_HANDLER_AVAILABLE:
+        with st.expander("📎 Attachments (Images & PDFs)"):
+            st.info("💡 Attach images or PDFs to ask questions about them. Requires a vision model like llava.")
+            
+            # File uploader
+            uploaded_files = st.file_uploader(
+                "Upload files",
+                type=['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp', 'pdf'],
+                accept_multiple_files=True,
+                help="Upload images or PDFs to include in your prompt"
+            )
+            
+            # Store attachments in session state
+            if "attachments" not in st.session_state:
+                st.session_state["attachments"] = []
+            
+            # Process uploaded files
+            if uploaded_files:
+                new_attachments = []
+                for uploaded_file in uploaded_files:
+                    # Save to temp file
+                    import tempfile
+                    with tempfile.NamedTemporaryFile(delete=False, suffix=Path(uploaded_file.name).suffix) as tmp_file:
+                        tmp_file.write(uploaded_file.read())
+                        tmp_path = tmp_file.name
+                    
+                    # Process attachment
+                    attachment_data = attachment_handler.process_attachment(tmp_path)
+                    if attachment_data:
+                        new_attachments.append(attachment_data)
+                        
+                        # Display preview
+                        col1, col2 = st.columns([1, 4])
+                        with col1:
+                            if attachment_data['type'] == 'image':
+                                st.image(f"data:image/png;base64,{attachment_data['data']}", 
+                                       width=100, caption=attachment_data['file_name'])
+                            elif attachment_data['type'] == 'pdf':
+                                st.write(f"📄 {attachment_data['file_name']}")
+                                st.caption(f"{attachment_data.get('processed_pages', 0)} pages")
+                        
+                        with col2:
+                            if attachment_data['type'] == 'image':
+                                st.success(f"✅ {attachment_data['file_name']} ({attachment_data['size'][0]}x{attachment_data['size'][1]})")
+                            elif attachment_data['type'] == 'pdf':
+                                st.success(f"✅ {attachment_data['file_name']} - Text extracted")
+                    else:
+                        st.error(f"❌ Failed to process {uploaded_file.name}")
+                    
+                    # Clean up temp file
+                    try:
+                        os.unlink(tmp_path)
+                    except:
+                        pass
+                
+                # Update session state
+                st.session_state["attachments"].extend(new_attachments)
+            
+            # Show current attachments
+            if st.session_state["attachments"]:
+                st.write(f"**Current Attachments:** {len(st.session_state['attachments'])}")
+                cols = st.columns(min(len(st.session_state["attachments"]), 4))
+                for i, att in enumerate(st.session_state["attachments"]):
+                    with cols[i % 4]:
+                        if att['type'] == 'image':
+                            st.image(f"data:image/png;base64,{att['data']}", 
+                                   width=100, caption=att['file_name'])
+                        else:
+                            st.write(f"📄 {att['file_name']}")
+                
+                if st.button("🗑️ Clear Attachments"):
+                    st.session_state["attachments"] = []
+                    st.rerun()
+    
     # Text input
     prompt = st.chat_input("Type your message here...")
     
     if prompt:
-        process_user_input(prompt, model)
+        # Debug logging
+        print(f"\n🔍 DEBUG: New prompt received: '{prompt}'")
+        print(f"🔍 DEBUG: Agentic mode in session_state: {st.session_state.get('agentic_mode', 'NOT SET')}")
+        print(f"🔍 DEBUG: Vision mode in session_state: {st.session_state.get('vision_mode', 'NOT SET')}")
+        print(f"🔍 DEBUG: AGENTIC_HANDLER_AVAILABLE: {AGENTIC_HANDLER_AVAILABLE}")
+        print(f"🔍 DEBUG: VISION_AGENT_AVAILABLE: {VISION_AGENT_AVAILABLE}")
+        
+        # Get attachments if available
+        attachments = st.session_state.get("attachments", [])
+        
+        # Check which mode to use
+        if st.session_state.get("vision_mode") and VISION_AGENT_AVAILABLE:
+            # Use vision agent for autonomous task execution
+            print(f"🔍 DEBUG: Routing to VISION AGENT")
+            process_vision_input(prompt, model)
+        elif st.session_state.get("agentic_mode") and AGENTIC_HANDLER_AVAILABLE:
+            # Use agentic handler for basic desktop control
+            print(f"🔍 DEBUG: Routing to BASIC AGENTIC handler")
+            process_agentic_input(prompt, model, attachments)
+        else:
+            # Use normal chat processing
+            print(f"🔍 DEBUG: Routing to NORMAL chat handler")
+            process_user_input(prompt, model, attachments)
+        
+        # Clear attachments after sending
+        if attachments:
+            st.session_state["attachments"] = []
 
 def remove_think_tags(text: str) -> str:
     """Remove <think> tags from text for TTS generation"""
@@ -774,14 +948,58 @@ def remove_think_tags(text: str) -> str:
     
     return clean_text
 
-def process_user_input(prompt, model):
-    """Process user input and generate response"""
+def process_user_input(prompt, model, attachments=None):
+    """Process user input and generate response
+    
+    Args:
+        prompt: Text prompt from user
+        model: Model to use for generation
+        attachments: Optional list of attachment dictionaries
+    """
+    # Format attachments for display
+    display_content = prompt
+    if attachments and len(attachments) > 0:
+        display_content += f"\n\n📎 **Attachments:** {len(attachments)} file(s)"
+        for att in attachments:
+            if att['type'] == 'image':
+                display_content += f"\n- 🖼️ {att['file_name']}"
+            elif att['type'] == 'pdf':
+                display_content += f"\n- 📄 {att['file_name']}"
+    
     # Add user message
-    st.session_state.messages.append({"role": "user", "content": prompt})
+    st.session_state.messages.append({"role": "user", "content": display_content, "attachments": attachments})
     
     with st.chat_message("user"):
-        st.markdown(prompt)
-    lm.append_md_log("user", prompt)
+        st.markdown(display_content)
+        # Show attachment previews
+        if attachments:
+            cols = st.columns(min(len(attachments), 4))
+            for i, att in enumerate(attachments):
+                with cols[i % 4]:
+                    if att['type'] == 'image':
+                        st.image(f"data:image/png;base64,{att['data']}", 
+                               width=150, caption=att['file_name'])
+                    elif att['type'] == 'pdf':
+                        st.caption(f"📄 {att['file_name']}")
+    
+    lm.append_md_log("user", display_content)
+    
+    # Prepare images for Ollama (if attachments present and handler available)
+    images = None
+    if attachments and ATTACHMENT_HANDLER_AVAILABLE:
+        formatted_data = attachment_handler.format_for_ollama(prompt, attachments)
+        prompt = formatted_data['prompt']  # Use enhanced prompt with PDF context
+        if formatted_data.get('has_images'):
+            images = formatted_data.get('images')
+    
+    # Check if prompt should be handled by prompt_handler (weather, news, web search)
+    special_response = None
+    if PROMPT_HANDLER_AVAILABLE:
+        try:
+            special_response = prompt_handler.handle_query(prompt)
+        except Exception as e:
+            logger.warning(f"Prompt handler failed: {e}")
+            special_response = None
     
     # Generate assistant response
     with st.chat_message("assistant"):
@@ -793,10 +1011,14 @@ def process_user_input(prompt, model):
                 time.sleep(0.01)
                 progress_value = min((percent + 1) / 100.0, 1.0)
                 progress.progress(progress_value, text="Generating response...")
-            response = "Hi! This is a test message from Samosa GPT."
+            response = "Hi! This is a test message from Aurora."
             progress.progress(1.0, text="Response generated!")
             st.markdown(response)
             progress.empty()
+        elif special_response:
+            # Special query handled by prompt_handler (weather, news, web search)
+            response = special_response
+            st.markdown(response, unsafe_allow_html=True)
         else:
             # Check if streaming is enabled
             if st.session_state.get("enable_streaming", True):
@@ -810,7 +1032,7 @@ def process_user_input(prompt, model):
                 
                 # Stream the response
                 try:
-                    for chunk in gen.ollama_manager.chat_with_memory_stream(prompt, model):
+                    for chunk in gen.ollama_manager.chat_with_memory_stream(prompt, model, images=images):
                         if chunk:  # Only process non-empty chunks
                             full_response += chunk
                             
@@ -838,7 +1060,7 @@ def process_user_input(prompt, model):
             else:
                 # Non-streaming mode (original behavior)
                 with st.spinner("Generating response..."):
-                    response = gen.ollama_manager.chat_with_memory(prompt, model)
+                    response = gen.ollama_manager.chat_with_memory(prompt, model, images=images)
                 # Check if response contains HTML details/summary tags (from think processing)
                 if '<details>' in response and '<summary>' in response:
                     st.markdown(response, unsafe_allow_html=True)
@@ -876,6 +1098,190 @@ def process_user_input(prompt, model):
             'content': response,
             'audio_path': audio_path
         })
+
+def process_agentic_input(prompt, model, attachments=None):
+    """Process user input with agentic capabilities for desktop control
+    
+    Args:
+        prompt: Text prompt from user
+        model: Model to use for generation
+        attachments: Optional list of attachment dictionaries
+    """
+    # Debug logging
+    print(f"🔍 DEBUG: Agentic mode processing request: '{prompt}'")
+    print(f"🔍 DEBUG: Model: {model}")
+    print(f"🔍 DEBUG: Agentic handler available: {AGENTIC_HANDLER_AVAILABLE}")
+    
+    # Format attachments for display
+    display_content = prompt
+    if attachments and len(attachments) > 0:
+        display_content += f"\n\n📎 **Attachments:** {len(attachments)} file(s)"
+        for att in attachments:
+            if att['type'] == 'image':
+                display_content += f"\n- 🖼️ {att['file_name']}"
+            elif att['type'] == 'pdf':
+                display_content += f"\n- 📄 {att['file_name']}"
+    
+    # Add user message
+    st.session_state.messages.append({"role": "user", "content": display_content, "attachments": attachments})
+    
+    with st.chat_message("user"):
+        st.markdown(display_content)
+        # Show attachment previews
+        if attachments:
+            cols = st.columns(min(len(attachments), 4))
+            for i, att in enumerate(attachments):
+                with cols[i % 4]:
+                    if att['type'] == 'image':
+                        st.image(f"data:image/png;base64,{att['data']}", 
+                               width=150, caption=att['file_name'])
+                    elif att['type'] == 'pdf':
+                        st.caption(f"📄 {att['file_name']}")
+    
+    lm.append_md_log("user", display_content)
+    
+    # Generate assistant response with agentic capabilities
+    with st.chat_message("assistant"):
+        status_placeholder = st.empty()
+        response_placeholder = st.empty()
+        
+        try:
+            # Show thinking status
+            status_placeholder.info("🤖 Analyzing your request with agentic AI...")
+            
+            # Call agentic handler
+            print(f"🔍 DEBUG: Calling handle_agentic_request with prompt: '{prompt}', model: '{model}'")
+            response = handle_agentic_request(prompt, model)
+            print(f"🔍 DEBUG: Agentic response: {response[:200]}...")  # First 200 chars
+            
+            # Clear status and show response
+            status_placeholder.empty()
+            response_placeholder.markdown(response, unsafe_allow_html=True)
+            
+        except Exception as e:
+            # Show error
+            status_placeholder.empty()
+            error_msg = f"❌ Error in agentic processing: {str(e)}"
+            print(f"🔍 DEBUG: {error_msg}")
+            response_placeholder.error(error_msg)
+            response = error_msg
+        
+        lm.append_md_log("assistant", response)
+        
+        # Generate speech only if enabled
+        audio_path = None
+        if st.session_state.get("enable_speech", True):
+            try:
+                voice_preset = st.session_state.get("bark_voice_preset", "v2/en_speaker_0")
+                clean_response = remove_think_tags(response)
+                
+                if clean_response.strip():
+                    audio_path = speak_text(clean_response, voice_preset=voice_preset, return_path=True)
+            except Exception as e:
+                print(f"Speech generation failed: {e}")
+        
+        st.session_state.messages.append({
+            'role': 'assistant',
+            'content': response,
+            'audio_path': audio_path
+        })
+
+
+def process_vision_input(prompt, model):
+    """Process user input with vision agent for autonomous task execution
+    
+    Args:
+        prompt: Text prompt from user describing the task
+        model: Model to use for vision analysis
+    """
+    import time
+    import traceback
+    
+    print(f"🔍 DEBUG: Vision agent processing request: '{prompt}'")
+    print(f"🔍 DEBUG: Original model: {model}")
+    
+    # Force use of llava for vision tasks
+    vision_model = "llava:latest"
+    print(f"🔍 DEBUG: Using vision model: {vision_model}")
+    
+    # Add user message
+    st.session_state.messages.append({"role": "user", "content": prompt})
+    
+    with st.chat_message("user"):
+        st.markdown(prompt)
+    
+    lm.append_md_log("user", prompt)
+    
+    # Generate assistant response with vision agent
+    with st.chat_message("assistant"):
+        status_placeholder = st.empty()
+        response_placeholder = st.empty()
+        progress_placeholder = st.empty()
+        
+        try:
+            # Show initial status
+            status_placeholder.info("👁️ Vision Agent activating...")
+            time.sleep(0.5)
+            
+            status_placeholder.info("📋 Creating roadmap...")
+            time.sleep(0.5)
+            
+            status_placeholder.success("🚀 Executing autonomous task with vision feedback...")
+            
+            # Show progress
+            progress_bar = progress_placeholder.progress(0)
+            
+            # Execute task with vision agent
+            print(f"🔍 DEBUG: Calling execute_autonomous_task")
+            
+            # Execute in a way that shows progress
+            result_summary = execute_autonomous_task(prompt, vision_model)
+            
+            progress_bar.progress(100)
+            
+            # Clear status and progress
+            status_placeholder.empty()
+            progress_placeholder.empty()
+            
+            # Show result
+            response_placeholder.markdown(result_summary, unsafe_allow_html=True)
+            
+            # Add link to screenshots
+            screenshots_dir = vision_agent.screenshots_dir
+            if screenshots_dir.exists():
+                st.info(f"📸 Screenshots and execution log saved to: `{screenshots_dir}`")
+            
+            response = result_summary
+            
+        except Exception as e:
+            # Show error
+            status_placeholder.empty()
+            progress_placeholder.empty()
+            error_msg = f"❌ Error in vision agent execution: {str(e)}\n\n```\n{traceback.format_exc()}\n```"
+            print(f"🔍 DEBUG: {error_msg}")
+            response_placeholder.error(error_msg)
+            response = error_msg
+        
+        lm.append_md_log("assistant", response)
+        
+        # Generate speech only if enabled
+        audio_path = None
+        if st.session_state.get("enable_speech", True):
+            try:
+                voice_preset = st.session_state.get("bark_voice_preset", "v2/en_speaker_0")
+                clean_response = remove_think_tags(response)
+                
+                if clean_response.strip():
+                    audio_path = speak_text(clean_response, voice_preset=voice_preset, return_path=True)
+            except Exception as e:
+                print(f"Speech generation failed: {e}")
+        
+        st.session_state.messages.append({
+            'role': 'assistant',
+            'content': response,
+            'audio_path': audio_path
+        })
+
 
 def image_generation_page():
     """Image generation interface"""
@@ -2144,25 +2550,27 @@ def video_generation_page():
 
 def about_page():
     """About page"""
-    st.title("ℹ️ About Samosa GPT")
+    st.title("ℹ️ About Aurora")
     
     st.markdown("""
-    ## 🤖 Welcome to Samosa GPT
+    ## 🌅 Welcome to Aurora
     
-    **Samosa GPT** is an advanced AI assistant that combines multiple AI capabilities:
+    **Aurora** is an advanced AI assistant that combines multiple AI capabilities:
     
     ### ✨ Features
     - **💬 Intelligent Chat**: Powered by Ollama models
     - **🎨 Image Generation**: Create multiple images using Stable Diffusion (default: 2 images)
     - **🗣️ Voice Interaction**: Speech-to-text and text-to-speech with synchronized display
     - **🔍 Web Search**: Wikipedia, Google, YouTube integration
+    - **🤖 AI-Powered Search**: Smart search using Ollama (NEW!)
+    - **📰 Topic News Search**: Search news by specific topics (NEW!)
     - **🌤️ Real-time Info**: Weather and news updates
     
     ### 🎯 How to Use
     1. **Chat**: Select a model and start chatting
     2. **Voice**: Use the microphone for hands-free interaction
     3. **Images**: Switch to the Image Generation page, generate 1-10 images (default: 2)
-    4. **Commands**: Try "wikipedia AI" or "weather in London"
+    4. **Commands**: Try "web search AI" or "smart search quantum computing"
     
     ### 🛠️ Technical Details
     - **Version**: 3.5.0
@@ -2174,9 +2582,14 @@ def about_page():
     ```
     Wikipedia: "wikipedia [topic]"
     Weather: "weather in [city]"
-    Search: "search google for [term]"
+    Google: "search google for [term]"
     YouTube: "search youtube for [term]"
     News: "latest news"
+    
+    NEW COMMANDS:
+    AI Search: "web search [query]"
+    Smart Search: "smart search [topic]"
+    Topic News: "news about [topic]"
     ```
     
     ### 🔧 System Requirements
@@ -2302,7 +2715,7 @@ def about_page():
                     st.download_button(
                         label="📥 Download preferences.json",
                         data=_preferences_manager._save_to_string(),
-                        file_name="samosa_preferences.json",
+                        file_name="aurora_preferences.json",
                         mime="application/json"
                     )
             
@@ -2725,7 +3138,7 @@ def main():
     st.markdown("<div style='margin-top: 20px;'></div>", unsafe_allow_html=True)
     
     # Sidebar without navigation menu - only quick actions
-    st.sidebar.title("🥟 Samosa GPT")
+    st.sidebar.title("🌅 Aurora")
     st.sidebar.markdown("---")
     st.sidebar.markdown("### 🔧 Quick Actions")
     
@@ -2734,12 +3147,12 @@ def main():
         if "messages" in st.session_state:
             st.session_state.messages = [{
                 'role': 'assistant',
-                'content': 'Hi! I am Samosa GPT, an intelligent AI assistant. How can I help you today?'
+                'content': 'Hi! I am Aurora, an intelligent AI assistant. How can I help you today?'
             }]
             st.rerun()
     
     if st.sidebar.button("📝 View Logs"):
-        log_path = os.path.join(config.LOGS_DIR, "samosa.log")
+        log_path = os.path.join(config.LOGS_DIR, "aurora.log")
         if os.path.exists(log_path):
             with open(log_path, 'r', encoding='utf-8') as f:
                 log_content = f.read()

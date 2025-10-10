@@ -1,5 +1,5 @@
 """
-Video Generation Manager for Samosa GPT with Hugging Face integration
+Video Generation Manager for Aurora with Hugging Face integration
 """
 import os
 import logging

@@ -1,5 +1,5 @@
 """
-Security module for Samosa GPT production deployment
+Security module for Aurora production deployment
 """
 import hashlib
 import secrets

@@ -21,7 +21,7 @@ else:
 def navbar(
     items: List[Dict[str, Any]],
     key: Optional[str] = None,
-    logo_text: str = "🥟 Samosa GPT",
+    logo_text: str = "🌅 Aurora",
     selected: Optional[str] = None,
     sticky: bool = True,
     style: Optional[Dict[str, str]] = None,
@@ -41,7 +41,7 @@ def navbar(
     key : str, optional
         An optional key that uniquely identifies this component.
         
-    logo_text : str, default "🥟 Samosa GPT"
+    logo_text : str, default "🌅 Aurora"
         Text to display as logo/brand.
         
     selected : str, optional

@@ -19,7 +19,7 @@ interface StreamlitArgs {
 const StreamlitNavbar: React.FC<ComponentProps> = ({ args }) => {
   const {
     items = [],
-    logoText = "🥟 Samosa GPT",
+    logoText = "🌅 Aurora",
     selected,
     sticky = true,
     style = {},

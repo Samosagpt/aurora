@@ -71,8 +71,14 @@ class OllamaManager:
             logger.error(f"Error setting model: {e}")
             return False
     
-    def chat_with_memory(self, user_input: str, model_name: str = None) -> str:
-        """Enhanced chat with memory and error handling"""
+    def chat_with_memory(self, user_input: str, model_name: str = None, images: List[str] = None) -> str:
+        """Enhanced chat with memory and error handling, supports multimodal input
+        
+        Args:
+            user_input: Text prompt from user
+            model_name: Ollama model to use
+            images: List of base64 encoded images for multimodal models
+        """
         try:
             # Use provided model or current model or default
             model_to_use = model_name or self.current_model or config.DEFAULT_OLLAMA_MODEL
@@ -89,7 +95,14 @@ class OllamaManager:
             history = log_manager.read_json_history()
             
             # Add user input to history
-            history.append({'role': 'user', 'content': user_input})
+            user_message = {'role': 'user', 'content': user_input}
+            
+            # Add images if provided (for multimodal models)
+            if images and len(images) > 0:
+                user_message['images'] = images
+                logger.info(f"Sending {len(images)} images with prompt")
+            
+            history.append(user_message)
             log_manager.append_md_log('User', user_input)
             
             # Generate response
@@ -202,8 +215,14 @@ class OllamaManager:
         processed = re.sub(r'<think>(.*?)</think>', replace_think, text, flags=re.DOTALL)
         return processed
     
-    def chat_with_memory_stream(self, user_input: str, model_name: str = None):
-        """Enhanced chat with memory and streaming support"""
+    def chat_with_memory_stream(self, user_input: str, model_name: str = None, images: List[str] = None):
+        """Enhanced chat with memory and streaming support, supports multimodal input
+        
+        Args:
+            user_input: Text prompt from user
+            model_name: Ollama model to use
+            images: List of base64 encoded images for multimodal models
+        """
         try:
             # Use provided model or current model or default
             model_to_use = model_name or self.current_model or config.DEFAULT_OLLAMA_MODEL
@@ -221,7 +240,14 @@ class OllamaManager:
             history = log_manager.read_json_history()
             
             # Add user input to history
-            history.append({'role': 'user', 'content': user_input})
+            user_message = {'role': 'user', 'content': user_input}
+            
+            # Add images if provided (for multimodal models)
+            if images and len(images) > 0:
+                user_message['images'] = images
+                logger.info(f"Sending {len(images)} images with prompt")
+            
+            history.append(user_message)
             log_manager.append_md_log('User', user_input)
             
             # Generate streaming response

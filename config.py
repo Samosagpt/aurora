@@ -1,5 +1,5 @@
 """
-Configuration settings for Samosa GPT
+Configuration settings for Aurora
 """
 import os
 from pathlib import Path
@@ -43,11 +43,17 @@ class Config:
     NEWS_API_KEY = os.getenv("NEWS_API_KEY", "YOUR_API_KEY")
     
     # Ollama settings
-    DEFAULT_OLLAMA_MODEL = "samosagpt"
+    DEFAULT_OLLAMA_MODEL = "aurora"
     OLLAMA_HOST = os.getenv("OLLAMA_HOST", "http://localhost:11434")
+    OLLAMA_API_KEY = os.getenv("OLLAMA_API_KEY", "")  # Optional API key
+    OLLAMA_TIMEOUT = int(os.getenv("OLLAMA_TIMEOUT", "30"))
+    
+    # Web Search settings
+    WEB_SEARCH_MODEL = os.getenv("WEB_SEARCH_MODEL", DEFAULT_OLLAMA_MODEL)  # Model for AI web search
+    ENABLE_AI_SEARCH = os.getenv("ENABLE_AI_SEARCH", "true").lower() == "true"
     
     # Streamlit settings
-    PAGE_TITLE = "🤖 Samosa GPT"
+    PAGE_TITLE = "🌅 Aurora"
     PAGE_ICON = "🤖"
     LAYOUT = "wide"
     

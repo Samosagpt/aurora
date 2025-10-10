@@ -7,7 +7,7 @@ from Generation import init_model
 
 def main():
     init_model()
-    t2s.speak_text("Hello! I am Samosa GPT.")
+    t2s.speak_text("Hello! I am Aurora.")
     recognizer = sr.Recognizer()
     mic = sr.Microphone(device_index=1)
 

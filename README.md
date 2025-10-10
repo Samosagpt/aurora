@@ -15,6 +15,9 @@ Samosa GPT is a comprehensive AI assistant that combines text, voice, and image 
 
 ### 🎯 Core Capabilities
 - **Multi-Modal AI Chat**: Text conversations using Ollama models
+- **📎 Attachment Support**: Upload and analyze images & PDFs with vision models
+- **🔍 AI-Powered Web Search**: Intelligent search using Ollama API
+- **🤖 Agentic AI Desktop Control**: Control your computer through natural language (NEW!)
 - **Voice Interaction**: Speech-to-text and text-to-speech capabilities
 - **Image Generation**: Multiple Stable Diffusion models support
 - **Web Search Integration**: Wikipedia, Google, YouTube search
@@ -22,7 +25,7 @@ Samosa GPT is a comprehensive AI assistant that combines text, voice, and image 
 - **Smart Intent Detection**: Automatic routing of user queries
 
 ### 🖥️ Interface Options
-- **Web Interface**: Modern Streamlit-based GUI
+- **Web Interface**: Modern Streamlit-based GUI with drag-and-drop attachments
 - **Command Line**: Terminal-based interaction
 - **Voice Mode**: Hands-free voice commands
 - **Standalone Executable**: No Python installation required
@@ -33,6 +36,68 @@ Samosa GPT is a comprehensive AI assistant that combines text, voice, and image 
 - Advanced generation parameters
 - Download functionality
 - GPU acceleration support
+
+### 🤖 Agentic AI - Desktop Control (NEW!)
+Turn your AI into a desktop automation assistant! The agentic AI can:
+- **Control Mouse & Keyboard**: Click, type, move, shortcuts
+- **Manage Applications**: Open, close, switch between programs
+- **File Operations**: Read, write, search, organize files
+- **Take Screenshots**: Capture and save screen images
+- **Run Commands**: Execute system commands safely
+- **Window Management**: List, switch, and control windows
+- **System Monitoring**: Check CPU, memory, disk usage
+
+**Example Commands:**
+```text
+"Open Notepad and type Hello World"
+"Take a screenshot and save it"
+"List all Python files in my Documents folder"
+"Close all Chrome windows"
+"Create a file called todo.txt with my tasks"
+```
+
+See [AGENTIC_GUIDE.md](AGENTIC_GUIDE.md) for detailed documentation.
+
+### 📎 Attachment Support
+- **Image Analysis**: Upload JPG, PNG, GIF, BMP, WEBP images
+- **PDF Processing**: Extract text and analyze PDF documents
+- **Vision Models**: LLaVA, BakLLaVA, Moondream, and more
+- **Multi-file Support**: Attach multiple files at once
+- **Smart Context**: Automatic text extraction from PDFs
+- **Use Cases**: 
+  - Ask questions about images
+  - Summarize documents
+  - Extract information from screenshots
+  - Analyze diagrams and charts
+
+**Quick Setup:**
+```bash
+# Install dependencies
+pip install Pillow PyPDF2 pdf2image
+
+# Install vision model
+ollama pull llava
+
+# See ATTACHMENT_GUIDE.md for full setup
+```
+
+### 🔍 AI-Powered Web Search (NEW!)
+- **Intelligent Search**: AI-enhanced web search using Ollama
+- **Smart Search**: Combined Wikipedia + AI knowledge
+- **News Search**: Search news by topic using AI
+- **Contextual Results**: Get comprehensive, AI-analyzed results
+- **Multiple Sources**: Combines Wikipedia, news, and AI insights
+- **Search Commands**:
+  - `web search [query]` - AI-powered search
+  - `smart search [topic]` - Deep research with multiple sources
+  - `news about [topic]` - Topic-specific news search
+  
+**Example:**
+```bash
+"web search latest developments in quantum computing"
+"smart search climate change solutions"
+"news about artificial intelligence"
+```
 
 ## 🚀 Quick Start
 
@@ -76,9 +141,23 @@ Samosa GPT is a comprehensive AI assistant that combines text, voice, and image 
    ollama pull llama2
    ollama pull mistral
    ollama pull codellama
+   
+   # For attachment support, install a vision model
+   ollama pull llava
    ```
 
-5. **Install Bark TTS (Optional)**
+5. **Setup Attachment Support (Optional)**
+   ```bash
+   # Windows
+   setup_attachments.bat
+   
+   # Linux/Mac
+   ./setup_attachments.sh
+   
+   # See ATTACHMENT_GUIDE.md for details
+   ```
+
+6. **Install Bark TTS (Optional)**
    ```bash
    # For high-quality text-to-speech
    pip install git+https://github.com/suno-ai/bark.git
@@ -103,6 +182,31 @@ Text-based interaction in terminal
 start run_console.bat
 ```
 Hands-free voice commands and responses
+
+#### Using Attachments
+1. Select a vision model (e.g., `llava`)
+2. Click **📎 Attachments** section
+3. Upload images or PDFs
+4. Ask questions about your attachments
+
+**Example queries:**
+- "What's in this image?"
+- "Summarize this PDF document"
+- "What does the chart in this image show?"
+
+See [QUICKSTART_ATTACHMENTS.md](QUICKSTART_ATTACHMENTS.md) for detailed guide.
+
+#### Using AI-Powered Web Search
+Try these new search commands:
+- `web search latest AI breakthroughs`
+- `smart search renewable energy`
+- `news about space exploration`
+- `search for Python best practices`
+
+**How it works:**
+- **Web Search**: Uses Ollama AI to provide comprehensive search results
+- **Smart Search**: Combines Wikipedia facts with AI analysis
+- **News Search**: Finds and summarizes news articles by topic
 
 ## 🎨 Image Generation
 
@@ -143,18 +247,28 @@ Samosa GPT includes a powerful image generation module with multiple models:
 ## ⚙️ Configuration
 
 ### Environment Variables
-Create a `.env` file with your API keys:
+Create a `.env` file with your configuration:
 ```env
-# API Keys
-OPENWEATHER_API_KEY=your_openweather_key
-NEWS_API_KEY=your_news_api_key
-
-# Ollama Configuration
+# Ollama Configuration (Required for AI search)
 OLLAMA_HOST=http://localhost:11434
+OLLAMA_API_KEY=your_ollama_api_key_here  # Your Ollama API key
+WEB_SEARCH_MODEL=samosagpt                # Model for AI web search
+ENABLE_AI_SEARCH=true                     # Enable AI-powered search
+
+# Optional API Keys (AI search is used by default)
+OPENWEATHER_API_KEY=                      # Optional, AI search used if not set
+NEWS_API_KEY=                             # Optional, AI search used if not set
 
 # Debug Mode
 DEBUG=false
 ```
+
+**Important:** Weather and news now use AI-powered web search by default. External API keys are optional!
+
+**Get API Keys:**
+- **Ollama API Key:** Required for AI-powered search (your key is already configured)
+- OpenWeather API: https://openweathermap.org/api (OPTIONAL - AI search is default)
+- News API: https://newsapi.org/ (OPTIONAL - AI search is default)
 
 ### Model Configuration
 Edit `config.py` to customize:
@@ -175,6 +289,7 @@ samosa/
 ├── 
 ├── Core Modules/
 ├── ├── Generation.py          # AI chat with Ollama
+├── ├── attachment_handler.py  # Image & PDF processing (NEW!)
 ├── ├── image_gen.py          # Image generation
 ├── ├── offline_sr_whisper.py # Speech recognition
 ├── ├── offline_text2speech.py# Text-to-speech
@@ -194,7 +309,10 @@ samosa/
 ├── 
 └── Assets/
     ├── _assets/              # Audio and media files
-    └── logs/                 # Application logs
+    ├── logs/                 # Application logs
+    ├── ATTACHMENT_GUIDE.md   # Attachment documentation (NEW!)
+    ├── QUICKSTART_ATTACHMENTS.md # Quick start guide (NEW!)
+    └── test_attachments.py   # Test attachment support (NEW!)
 ```
 
 ## 🔧 Advanced Usage
@@ -211,6 +329,30 @@ Use any Hugging Face diffusion model:
 2. Enter the model ID (e.g., `user/model-name`)
 3. The model will be downloaded automatically
 
+### Using Attachments Programmatically
+```python
+from attachment_handler import attachment_handler
+from Generation import ollama_manager
+
+# Process an image
+image_data = attachment_handler.process_image("photo.jpg")
+
+# Format for Ollama
+formatted = attachment_handler.format_for_ollama(
+    "What's in this image?",
+    [image_data]
+)
+
+# Get response
+response = ollama_manager.chat_with_memory(
+    formatted['prompt'],
+    model_name="llava",
+    images=formatted.get('images')
+)
+```
+
+See [ATTACHMENT_GUIDE.md](ATTACHMENT_GUIDE.md) for complete API documentation.
+
 ### API Integration
 Configure external APIs for enhanced functionality:
 - OpenWeather API for weather data
@@ -222,6 +364,9 @@ Configure external APIs for enhanced functionality:
 ### Run Tests
 ```bash
 python -m pytest tests/
+
+# Test attachment support
+python test_attachments.py
 ```
 
 ### Test Components

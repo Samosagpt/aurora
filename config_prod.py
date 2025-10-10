@@ -89,6 +89,11 @@ class ProductionConfig:
     DEFAULT_OLLAMA_MODEL = os.getenv("DEFAULT_OLLAMA_MODEL", "samosagpt")
     OLLAMA_HOST = os.getenv("OLLAMA_HOST", "http://localhost:11434")
     OLLAMA_TIMEOUT = int(os.getenv("OLLAMA_TIMEOUT", "30"))
+    OLLAMA_API_KEY = os.getenv("OLLAMA_API_KEY", "")  # Optional API key for Ollama
+    
+    # Web Search settings
+    WEB_SEARCH_MODEL = os.getenv("WEB_SEARCH_MODEL", DEFAULT_OLLAMA_MODEL)
+    ENABLE_AI_SEARCH = os.getenv("ENABLE_AI_SEARCH", "true").lower() == "true"
     
     # Streamlit settings
     PAGE_TITLE = "🤖 Samosa GPT"

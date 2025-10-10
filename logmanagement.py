@@ -1,5 +1,5 @@
 """
-Enhanced logging management for Samosa GPT
+Enhanced logging management for Aurora
 """
 import json
 import datetime
@@ -14,7 +14,7 @@ logging.basicConfig(
     level=logging.INFO if not config.DEBUG else logging.DEBUG,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.FileHandler(config.LOGS_DIR / 'samosa.log'),
+        logging.FileHandler(config.LOGS_DIR / 'aurora.log'),
         logging.StreamHandler()
     ]
 )
@@ -43,7 +43,7 @@ class LogManager:
     
     def _initialize_md_log(self) -> None:
         """Initialize markdown log with header"""
-        header = f"""# Samosa GPT Assistant Log
+        header = f"""# Aurora Assistant Log
         
 Generated on: {datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
 Version: {config.VERSION}

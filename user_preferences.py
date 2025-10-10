@@ -1,5 +1,5 @@
 """
-User Preferences Manager for Samosa GPT
+User Preferences Manager for Aurora
 Handles loading, saving, and managing user preferences across all components.
 """
 import json

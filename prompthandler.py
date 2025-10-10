@@ -1,5 +1,5 @@
 """
-Enhanced prompt handler for Samosa GPT with better intent detection
+Enhanced prompt handler for Aurora with better intent detection
 """
 import re
 import logging
@@ -33,6 +33,18 @@ class PromptHandler:
                 r'^play\s+(.+)\s+on youtube',
                 r'^find\s+(.+)\s+on youtube'
             ],
+            'web_search': [
+                r'^web search\s+(.+)',
+                r'^search web for\s+(.+)',
+                r'^search for\s+(.+)',
+                r'^look up\s+(.+)',
+                r'^find information about\s+(.+)'
+            ],
+            'smart_search': [
+                r'^smart search\s+(.+)',
+                r'^deep search\s+(.+)',
+                r'^research\s+(.+)'
+            ],
             'news': [
                 r'^news$',
                 r'^latest news$',
@@ -41,12 +53,23 @@ class PromptHandler:
                 r'^news from\s+(.+)',
                 r'^(.+)\s+news$'
             ],
+            'news_topic': [
+                r'^news about\s+(.+)',
+                r'^search news for\s+(.+)',
+                r'^(.+)\s+in the news$'
+            ],
             'weather': [
                 r'^weather$',
                 r'^weather in\s+(.+)',
                 r'^what\'?s the weather in\s+(.+)',
+                r'^what is the weather in\s+(.+)',
+                r'^what\'?s the weather like in\s+(.+)',
+                r'^what is the weather like in\s+(.+)',
                 r'^(.+)\s+weather$',
-                r'^how\'?s the weather in\s+(.+)'
+                r'^how\'?s the weather in\s+(.+)',
+                r'^how is the weather in\s+(.+)',
+                r'^tell me about the weather in\s+(.+)',
+                r'^get weather for\s+(.+)'
             ]
         }
     
@@ -103,8 +126,44 @@ class PromptHandler:
         logger.info(f"YouTube search for: {term}")
         return web_services.open_youtube(term)
     
+    def _handle_web_search(self, query: str, original_query: str) -> str:
+        """Handle AI-powered web search requests"""
+        if not query:
+            query = original_query
+        
+        if not query:
+            return "Please specify what you'd like me to search for."
+        
+        logger.info(f"AI web search for: {query}")
+        return web_services.ai_web_search(query)
+    
+    def _handle_smart_search(self, query: str, original_query: str) -> str:
+        """Handle smart search requests (Wikipedia + AI)"""
+        if not query:
+            query = original_query
+        
+        if not query:
+            return "Please specify what you'd like me to research."
+        
+        logger.info(f"Smart search for: {query}")
+        return web_services.smart_search(query)
+    
+    def _handle_news_topic(self, topic: str) -> str:
+        """Handle news search by topic using AI-powered web search"""
+        if not topic:
+            return "Please specify a news topic to search for."
+        
+        logger.info(f"News topic search for: {topic}")
+        # get_news_by_topic now returns a formatted string, not a list
+        news_text = web_services.get_news_by_topic(topic)
+        
+        if news_text:
+            return news_text
+        else:
+            return f"Sorry, I couldn't find recent news about '{topic}'."
+    
     def _handle_news_request(self, location: Optional[str] = None) -> str:
-        """Handle news requests"""
+        """Handle news requests using AI-powered web search"""
         logger.info(f"News request for location: {location}")
         
         country = 'us'  # default
@@ -123,25 +182,25 @@ class PromptHandler:
             }
             country = country_map.get(location.lower(), 'us')
         
-        articles = web_services.get_news(country=country)
+        # get_news now returns a formatted string, not a list
+        news_text = web_services.get_news(country=country)
         
-        if articles and len(articles) > 1:
-            news_text = "📰 **Latest News:**\n\n"
-            news_text += "\n".join(articles[:8])  # Limit to 8 articles
+        if news_text:
             return news_text
         else:
             return "Sorry, I couldn't fetch the latest news right now."
     
     def _handle_weather_request(self, city: Optional[str]) -> str:
-        """Handle weather requests"""
+        """Handle weather requests using AI-powered web search"""
         if not city:
             return "Please specify a city for the weather forecast. For example: 'weather in New York'"
         
         logger.info(f"Weather request for: {city}")
-        weather_data = web_services.get_weather(city)
+        # get_weather now returns a formatted string directly
+        weather_info = web_services.get_weather(city)
         
-        if weather_data:
-            return web_services.format_weather_response(weather_data)
+        if weather_info:
+            return weather_info
         else:
             return f"Sorry, I couldn't get weather information for '{city}'. Please check the city name."
     
@@ -186,8 +245,17 @@ class PromptHandler:
             elif intent == 'youtube_search':
                 return self._handle_youtube_search(param, query)
             
+            elif intent == 'web_search':
+                return self._handle_web_search(param, query)
+            
+            elif intent == 'smart_search':
+                return self._handle_smart_search(param, query)
+            
             elif intent == 'news':
                 return self._handle_news_request(param)
+            
+            elif intent == 'news_topic':
+                return self._handle_news_topic(param)
             
             elif intent == 'weather':
                 return self._handle_weather_request(param)
@@ -206,7 +274,7 @@ class PromptHandler:
     def get_help_text(self) -> str:
         """Get help text with available commands"""
         help_text = """
-🤖 **Samosa GPT Help**
+🌅 **Aurora Help**
 
 **Available Commands:**
 
@@ -214,9 +282,13 @@ class PromptHandler:
 - `wikipedia [topic]` - Search Wikipedia
 - `search google for [term]` - Open Google search
 - `search youtube for [term]` - Open YouTube search
+- `web search [query]` - AI-powered web search (NEW!)
+- `smart search [query]` - Combined Wikipedia + AI search (NEW!)
+- `search for [anything]` - General web search
 
 📰 **Information Commands:**
 - `news` - Get latest news headlines
+- `news about [topic]` - Search news by topic (NEW!)
 - `weather in [city]` - Get weather information
 
 💬 **Chat:**
@@ -224,9 +296,11 @@ class PromptHandler:
 
 **Examples:**
 - "wikipedia artificial intelligence"
+- "web search latest AI developments"
+- "smart search quantum computing"
+- "news about climate change"
 - "weather in London"
 - "search youtube for funny cats"
-- "latest news"
 - "What is machine learning?"
 """
         return help_text
