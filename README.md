@@ -1,4 +1,4 @@
-# 🤖 Samosa GPT: Advanced AI Assistant with Multi-Modal Capabilities
+# 🤖 Aurora: Advanced AI Assistant with Multi-Modal Capabilities
 
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![Version](https://img.shields.io/badge/version-1.0.0.0--pre-brightgreen.svg)](https://github.com/Samosagpt/samosa)
@@ -9,7 +9,7 @@
 
 ## 🌟 Overview
 
-Samosa GPT is a comprehensive AI assistant that combines text, voice, and image generation capabilities in a single, production-ready application. Built with modern Python technologies, it offers multiple interaction modes and can be packaged as a standalone executable.
+Aurora is a comprehensive AI assistant that combines text, voice, and image generation capabilities in a single, production-ready application. Built with modern Python technologies, it offers multiple interaction modes and can be packaged as a standalone executable.
 
 ## ✨ Key Features
 
