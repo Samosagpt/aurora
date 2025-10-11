@@ -518,12 +518,12 @@ def chat_page():
                                 st.error(f"Error installing model: {e}")
             
             # Set model to first available for now
-            model = available_models[0] if available_models else "aurora"
+            model = available_models[0] if available_models else None
         elif actual_selection:
             model = actual_selection
         else:
             # If no model selected, use first available or default
-            model = available_models[0] if available_models else "aurora"
+            model = available_models[0] if available_models else None
         
         # Handle button clicks from component
         component_value = st.session_state.get('chat_model_select')
@@ -608,14 +608,27 @@ def chat_page():
             _preferences_manager.save_preferences()
         
         # Show if this is a recommended model
-        if HARDWARE_OPTIMIZER_AVAILABLE and model in recommended_models:
+        if HARDWARE_OPTIMIZER_AVAILABLE and model and model in recommended_models:
             st.success(f"✅ {model} is optimized for your hardware")
-        elif HARDWARE_OPTIMIZER_AVAILABLE:
+        elif HARDWARE_OPTIMIZER_AVAILABLE and model:
             st.warning(f"⚠️ {model} may not be optimal for your hardware")
+        
+        # Check if no model is available
+        if not model:
+            st.error("⚠️ No Ollama models available. Please install a model first:")
+            st.code("ollama pull llama3.2", language="bash")
+            st.info("Or use the 'Install New Model' option above to install a model from the Ollama registry.")
+            return  # Exit early if no model available
             
     except Exception as e:
         st.error(f"Error selecting model: {e}")
-        model = "aurora"
+        # Try to get first available model or show error
+        if available_models:
+            model = available_models[0]
+        else:
+            st.error("⚠️ No Ollama models available. Please install a model first:")
+            st.code("ollama pull llama3.2", language="bash")
+            return
     
     # Speech and streaming settings with preferences
     col1, col2, col3 = st.columns([2, 1, 1])

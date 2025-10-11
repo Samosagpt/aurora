@@ -122,8 +122,23 @@ class WebServices:
             import ollama
             
             try:
-                # Call Ollama's web_search function
-                search_response = ollama.web_search(query, max_results=5)
+                # Initialize Ollama client with authentication
+                client_config = {'host': self.ollama_host}
+                
+                # Add API key if provided (required for web search)
+                if hasattr(config, 'OLLAMA_API_KEY') and config.OLLAMA_API_KEY:
+                    client_config['headers'] = {
+                        'Authorization': f'Bearer {config.OLLAMA_API_KEY}'
+                    }
+                    logger.info("Using API key for web search authentication")
+                else:
+                    logger.warning("No OLLAMA_API_KEY found - web search may fail")
+                
+                # Create authenticated client
+                client = ollama.Client(**client_config)
+                
+                # Call Ollama's web_search function through the client
+                search_response = client.web_search(query, max_results=5)
                 
                 # Check if we have results (response is WebSearchResponse object)
                 if not search_response or not hasattr(search_response, 'results') or not search_response.results:

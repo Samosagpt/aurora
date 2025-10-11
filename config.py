@@ -43,7 +43,7 @@ class Config:
     NEWS_API_KEY = os.getenv("NEWS_API_KEY", "YOUR_API_KEY")
     
     # Ollama settings
-    DEFAULT_OLLAMA_MODEL = "aurora"
+    DEFAULT_OLLAMA_MODEL = "llama3.2"
     OLLAMA_HOST = os.getenv("OLLAMA_HOST", "http://localhost:11434")
     OLLAMA_API_KEY = os.getenv("OLLAMA_API_KEY", "")  # Optional API key
     OLLAMA_TIMEOUT = int(os.getenv("OLLAMA_TIMEOUT", "30"))

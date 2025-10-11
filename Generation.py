@@ -20,9 +20,20 @@ class OllamaManager:
         self._initialize_client()
     
     def _initialize_client(self) -> None:
-        """Initialize Ollama client"""
+        """Initialize Ollama client with API key if provided"""
         try:
-            self.client = ollama.Client(host=config.OLLAMA_HOST)
+            # Initialize client with host and optional API key
+            client_config = {'host': config.OLLAMA_HOST}
+            
+            # Add API key if provided (for remote Ollama instances)
+            if hasattr(config, 'OLLAMA_API_KEY') and config.OLLAMA_API_KEY:
+                # Ollama Python client uses headers for authentication
+                client_config['headers'] = {
+                    'Authorization': f'Bearer {config.OLLAMA_API_KEY}'
+                }
+                logger.info("Ollama client initialized with API key authentication")
+            
+            self.client = ollama.Client(**client_config)
             logger.info(f"Ollama client initialized with host: {config.OLLAMA_HOST}")
         except Exception as e:
             logger.error(f"Failed to initialize Ollama client: {e}")
