@@ -22,6 +22,7 @@ import gc
 import tempfile
 import logging
 import base64
+import json
 from pathlib import Path
 
 # Import production modules
@@ -81,6 +82,24 @@ try:
 except ImportError:
     VISION_AGENT_AVAILABLE = False
     print("⚠️ Vision agent not available")
+
+# Import RAG handler for knowledge base
+try:
+    from rag_handler import get_rag_handler, RAGHandler
+    RAG_HANDLER_AVAILABLE = True
+    print("✅ RAG handler loaded (knowledge base)")
+except ImportError:
+    RAG_HANDLER_AVAILABLE = False
+    print("⚠️ RAG handler not available")
+
+# Import AURORA system configuration
+try:
+    from aurora_system import get_aurora_system, AuroraSystem
+    AURORA_SYSTEM_AVAILABLE = True
+    print("✅ AURORA system configuration loaded")
+except ImportError:
+    AURORA_SYSTEM_AVAILABLE = False
+    print("⚠️ AURORA system configuration not available")
 
 # Set up logging
 logger = logging.getLogger(__name__)
@@ -658,7 +677,7 @@ def chat_page():
             return
     
     # Speech and streaming settings with preferences
-    col1, col2, col3 = st.columns([2, 1, 1])
+    col1, col2, col3, col4 = st.columns([2, 1, 1, 1])
     with col1:
         st.write(f"**Selected Model:** {model}")
     with col2:
@@ -679,6 +698,21 @@ def chat_page():
         if _preferences_manager and enable_streaming != chat_prefs.get('preferred_streaming'):
             _preferences_manager.set_preference('chat', 'preferred_streaming', enable_streaming)
             _preferences_manager.save_preferences()
+    with col4:
+        # RAG toggle (enabled by default if RAG handler available)
+        enable_rag = st.checkbox("Use RAG", value=True, key="enable_rag", 
+                                help="Use knowledge base for enhanced responses",
+                                disabled=not RAG_HANDLER_AVAILABLE)
+        if enable_rag and RAG_HANDLER_AVAILABLE:
+            try:
+                rag_handler_temp = get_rag_handler()
+                stats = rag_handler_temp.get_database_stats()
+                if stats['total_documents'] > 0:
+                    st.caption(f"📚 {stats['total_documents']} docs")
+                else:
+                    st.caption("⚠️ Empty KB")
+            except:
+                pass
     
     # TTS Engine selection with preferences
     if st.session_state.get("enable_speech", True):
@@ -1041,6 +1075,88 @@ def process_user_input(prompt, model, attachments=None):
             logger.warning(f"Prompt handler failed: {e}")
             special_response = None
     
+    # PRIORITY 1: Check if RAG should be used (if enabled and knowledge base has content)
+    # RAG gets priority over special responses for better accuracy
+    rag_context = None
+    rag_answer = None
+    use_rag = st.session_state.get("enable_rag", True)  # RAG enabled by default
+    
+    if use_rag and RAG_HANDLER_AVAILABLE:
+        try:
+            rag_handler = get_rag_handler()
+            # Check if there's content in the knowledge base
+            stats = rag_handler.get_database_stats()
+            
+            if stats['total_documents'] > 0:
+                # Search for relevant context with lower threshold for better recall
+                search_results = rag_handler.db.search(prompt, top_k=5, min_score=0.1)
+                
+                if search_results:
+                    # High relevance - use RAG to generate complete answer
+                    if search_results[0]['score'] >= 0.3:
+                        logger.info(f"✅ RAG: Found highly relevant content (score: {search_results[0]['score']:.2f})")
+                        
+                        # Query RAG system for complete answer
+                        try:
+                            rag_result = rag_handler.query(prompt, context_window=min(len(search_results), 3))
+                            
+                            if isinstance(rag_result, dict):
+                                rag_answer = rag_result.get('answer', '')
+                                sources = rag_result.get('sources', [])
+                                
+                                # Store sources separately for dropdown display
+                                if sources:
+                                    # Don't add citations to answer text, we'll show them in dropdown
+                                    st.session_state['rag_sources'] = sources
+                                    logger.info(f"✅ RAG: Generated answer from {len(sources)} sources")
+                            else:
+                                rag_answer = str(rag_result)
+                                st.session_state['rag_sources'] = []
+                                
+                        except Exception as e:
+                            logger.warning(f"⚠️ RAG query failed, falling back to context enhancement: {e}")
+                    
+                    # Medium/Low relevance - enhance prompt with context
+                    if not rag_answer and search_results:
+                        rag_context_parts = []
+                        for idx, result in enumerate(search_results[:3]):
+                            source = result['metadata'].get('source', 'unknown')
+                            score = result['score']
+                            rag_context_parts.append(
+                                f"[Context {idx+1}] (from {source}, relevance: {score:.0%})\n{result['content']}"
+                            )
+                        
+                        rag_context = "\n\n".join(rag_context_parts)
+                        
+                        # Enhance the prompt with RAG context for better Ollama response
+                        enhanced_prompt = f"""You have been provided with relevant information from a knowledge base below. Use this information to answer the user's question naturally and conversationally.
+
+KNOWLEDGE BASE INFORMATION:
+{rag_context}
+
+---
+USER QUESTION: {prompt}
+
+CRITICAL INSTRUCTIONS:
+1. Answer naturally as if you know this information directly
+2. DO NOT use phrases like "according to the context", "based on the provided information", "the context mentions", etc.
+3. Be conversational and confident
+4. State facts directly from the knowledge base as if they are established facts
+5. Only mention if information is incomplete when truly necessary
+6. Provide a complete, helpful answer
+
+Answer the user's question now:"""
+                        
+                        prompt = enhanced_prompt
+                        logger.info(f"✅ RAG: Enhanced prompt with {len(search_results)} context chunks")
+                else:
+                    logger.info("ℹ️ RAG: No relevant content found in knowledge base")
+        except Exception as e:
+            logger.warning(f"⚠️ RAG processing failed: {e}")
+            import traceback
+            traceback.print_exc()
+            # Continue without RAG if it fails
+    
     # Generate assistant response
     with st.chat_message("assistant"):
         if prompt == "test":
@@ -1055,11 +1171,57 @@ def process_user_input(prompt, model, attachments=None):
             progress.progress(1.0, text="Response generated!")
             st.markdown(response)
             progress.empty()
+        elif rag_answer:
+            # PRIORITY: Use RAG-generated answer (most accurate)
+            response = rag_answer
+            # Add RAG indicator badge
+            st.info("📚 Answer from Knowledge Base")
+            st.markdown(response, unsafe_allow_html=True)
+            
+            # Show sources in a dropdown/expander
+            if st.session_state.get('rag_sources'):
+                with st.expander("📖 View Sources", expanded=False):
+                    sources = st.session_state.get('rag_sources', [])
+                    st.markdown("**Sources used to generate this answer:**")
+                    st.markdown("---")
+                    
+                    for idx, source in enumerate(sources[:5]):  # Show top 5 sources
+                        doc_id = source.get('doc_id', 'Unknown')
+                        score = source.get('score', 0)
+                        metadata = source.get('metadata', {})
+                        
+                        # Create a nice display for each source
+                        col1, col2 = st.columns([3, 1])
+                        with col1:
+                            source_name = metadata.get('source', 'Unknown Source')
+                            category = metadata.get('category', '')
+                            st.markdown(f"**{idx+1}. {source_name}**")
+                            if category:
+                                st.caption(f"Category: {category}")
+                        with col2:
+                            # Show relevance score
+                            st.metric("Relevance", f"{score:.0%}", label_visibility="collapsed")
+                        
+                        # Show doc ID in small text
+                        st.caption(f"Document ID: `{doc_id[:30]}...`")
+                        
+                        if idx < len(sources) - 1:
+                            st.markdown("---")
+                
+                # Clear sources after displaying
+                st.session_state['rag_sources'] = []
+            
+            logger.info("✅ Used RAG-generated answer")
         elif special_response:
             # Special query handled by prompt_handler (weather, news, web search)
             response = special_response
             st.markdown(response, unsafe_allow_html=True)
         else:
+            # Use Ollama for generation (may include RAG context in prompt)
+            if rag_context:
+                # Indicate that knowledge base context is being used
+                st.caption("📚 Using knowledge base context")
+            
             # Check if streaming is enabled
             if st.session_state.get("enable_streaming", True):
                 # Streaming mode
@@ -2588,37 +2750,411 @@ def video_generation_page():
                     torch.cuda.empty_cache()
                     gc.collect()
 
+def rag_knowledge_base_page():
+    """RAG Knowledge Base Management Page"""
+    st.title("📚 Knowledge Base (RAG)")
+    
+    if not RAG_HANDLER_AVAILABLE:
+        st.error("❌ RAG Handler not available. Please ensure rag_handler.py is in the project directory.")
+        st.info("The RAG system provides intelligent retrieval-augmented generation capabilities.")
+        return
+    
+    # Initialize RAG handler
+    try:
+        rag_handler = get_rag_handler(db_path="rag_db.json")
+    except Exception as e:
+        st.error(f"❌ Error initializing RAG handler: {e}")
+        return
+    
+    # Sidebar with stats
+    with st.sidebar:
+        st.markdown("### 📊 Database Statistics")
+        stats = rag_handler.get_database_stats()
+        
+        st.metric("Total Documents", stats['total_documents'])
+        st.metric("Total Chunks", stats['total_chunks'])
+        st.metric("Total Characters", f"{stats['total_characters']:,}")
+        
+        if stats.get('created'):
+            st.caption(f"Created: {stats['created'][:10]}")
+        if stats.get('updated'):
+            st.caption(f"Updated: {stats['updated'][:10]}")
+        
+        st.markdown("---")
+        
+        # Database management
+        st.markdown("### 🔧 Database Actions")
+        
+        if st.button("🔄 Refresh Stats"):
+            st.rerun()
+        
+        if st.button("🗑️ Clear Database", type="secondary"):
+            if st.session_state.get('confirm_clear_rag'):
+                rag_handler.db.clear_database()
+                st.success("✅ Database cleared!")
+                st.session_state['confirm_clear_rag'] = False
+                st.rerun()
+            else:
+                st.warning("⚠️ Click again to confirm clearing all documents")
+                st.session_state['confirm_clear_rag'] = True
+        
+        # Export database
+        if st.button("💾 Export Database"):
+            export_data = json.dumps(rag_handler.db.data, indent=2, ensure_ascii=False)
+            st.download_button(
+                label="📥 Download rag_db.json",
+                data=export_data,
+                file_name="rag_db_export.json",
+                mime="application/json"
+            )
+    
+    # Main content tabs
+    tab1, tab2, tab3, tab4 = st.tabs(["🔍 Query", "➕ Add Knowledge", "📂 Manage Documents", "📖 Help"])
+    
+    # Tab 1: Query Knowledge Base
+    with tab1:
+        st.subheader("🔍 Query Knowledge Base")
+        st.markdown("Ask questions and get answers based on your knowledge base using RAG.")
+        
+        # Query input
+        query_input = st.text_area(
+            "Enter your question:",
+            placeholder="What is Aurora? How does RAG work?",
+            height=100,
+            key="rag_query_input"
+        )
+        
+        col1, col2 = st.columns([3, 1])
+        with col1:
+            context_window = st.slider(
+                "Context chunks to retrieve:",
+                min_value=1,
+                max_value=10,
+                value=3,
+                help="Number of relevant text chunks to use for answering"
+            )
+        
+        with col2:
+            if st.button("🔍 Search", type="primary"):
+                if query_input.strip():
+                    with st.spinner("Searching knowledge base..."):
+                        result = rag_handler.query(query_input, context_window=context_window)
+                        
+                        # Display answer
+                        st.markdown("### 💡 Answer:")
+                        st.success(result['answer'])
+                        
+                        # Display sources if available
+                        if result.get('sources'):
+                            st.markdown("### 📖 Sources:")
+                            for idx, source in enumerate(result['sources']):
+                                with st.expander(f"Source {idx+1} - Score: {source['score']:.2f}"):
+                                    st.markdown(f"**Document ID:** `{source['doc_id']}`")
+                                    if source.get('metadata'):
+                                        st.json(source['metadata'])
+                        
+                        # Show retrieval stats
+                        if result.get('context_used'):
+                            st.info(f"✅ Used {result['num_contexts']} context chunks")
+                        else:
+                            st.warning("⚠️ No relevant context found in knowledge base")
+                else:
+                    st.warning("Please enter a question")
+    
+    # Tab 2: Add Knowledge
+    with tab2:
+        st.subheader("➕ Add Knowledge to Database")
+        
+        # Method selector
+        add_method = st.radio(
+            "Choose how to add knowledge:",
+            ["✍️ Manual Entry", "📂 Import from File"],
+            horizontal=True
+        )
+        
+        if add_method == "✍️ Manual Entry":
+            # Manual text entry
+            knowledge_content = st.text_area(
+                "Enter knowledge content:",
+                placeholder="Enter information you want to add to the knowledge base...",
+                height=200,
+                key="knowledge_content"
+            )
+            
+            col1, col2 = st.columns(2)
+            with col1:
+                knowledge_source = st.text_input(
+                    "Source (optional):",
+                    placeholder="e.g., manual, documentation, notes",
+                    value="manual"
+                )
+            
+            with col2:
+                knowledge_category = st.text_input(
+                    "Category (optional):",
+                    placeholder="e.g., features, technical, general"
+                )
+            
+            if st.button("➕ Add to Knowledge Base", type="primary"):
+                if knowledge_content.strip():
+                    metadata = {}
+                    if knowledge_category:
+                        metadata['category'] = knowledge_category
+                    
+                    doc_id = rag_handler.add_knowledge(
+                        knowledge_content,
+                        source=knowledge_source,
+                        metadata=metadata
+                    )
+                    
+                    if doc_id:
+                        st.success(f"✅ Knowledge added successfully! Document ID: `{doc_id}`")
+                        st.rerun()
+                    else:
+                        st.error("❌ Failed to add knowledge")
+                else:
+                    st.warning("Please enter some content")
+        
+        else:  # Import from file
+            uploaded_file = st.file_uploader(
+                "Upload a text file:",
+                type=['txt', 'md', 'json'],
+                help="Upload a text file to import into the knowledge base"
+            )
+            
+            chunk_size = st.slider(
+                "Maximum characters per chunk:",
+                min_value=500,
+                max_value=5000,
+                value=1000,
+                step=100,
+                help="Large files will be split into chunks of this size"
+            )
+            
+            if uploaded_file and st.button("📂 Import File", type="primary"):
+                with st.spinner("Importing file..."):
+                    try:
+                        # Save uploaded file temporarily
+                        import tempfile
+                        with tempfile.NamedTemporaryFile(delete=False, suffix='.txt') as tmp_file:
+                            tmp_file.write(uploaded_file.read())
+                            tmp_path = tmp_file.name
+                        
+                        # Import the file
+                        doc_ids = rag_handler.import_from_file(tmp_path, chunk_size=chunk_size)
+                        
+                        # Clean up
+                        try:
+                            os.unlink(tmp_path)
+                        except:
+                            pass
+                        
+                        if doc_ids:
+                            st.success(f"✅ Imported {len(doc_ids)} document(s) successfully!")
+                            st.info(f"Document IDs: {', '.join(doc_ids)}")
+                            st.rerun()
+                        else:
+                            st.error("❌ Failed to import file")
+                    except Exception as e:
+                        st.error(f"❌ Error importing file: {e}")
+    
+    # Tab 3: Manage Documents
+    with tab3:
+        st.subheader("📂 Manage Documents")
+        
+        # List all documents
+        if rag_handler.db.data['documents']:
+            st.markdown(f"**Total Documents:** {len(rag_handler.db.data['documents'])}")
+            
+            # Search/filter documents
+            filter_text = st.text_input(
+                "Filter documents:",
+                placeholder="Search by content or ID...",
+                key="filter_docs"
+            )
+            
+            # Display documents
+            for idx, doc in enumerate(rag_handler.db.data['documents']):
+                doc_id = doc['id']
+                content = doc['content']
+                metadata = doc.get('metadata', {})
+                
+                # Apply filter
+                if filter_text and filter_text.lower() not in doc_id.lower() and filter_text.lower() not in content.lower():
+                    continue
+                
+                with st.expander(f"📄 {doc_id[:50]}..." if len(doc_id) > 50 else f"📄 {doc_id}"):
+                    st.markdown(f"**Document ID:** `{doc_id}`")
+                    st.markdown(f"**Created:** {doc.get('created', 'Unknown')}")
+                    
+                    if metadata:
+                        st.markdown("**Metadata:**")
+                        st.json(metadata)
+                    
+                    st.markdown("**Content Preview:**")
+                    content_preview = content[:500] + "..." if len(content) > 500 else content
+                    st.text_area("", content_preview, height=150, key=f"preview_{idx}", disabled=True)
+                    
+                    st.markdown(f"**Chunks:** {len(doc.get('chunks', []))}")
+                    st.markdown(f"**Total Length:** {len(content)} characters")
+                    
+                    # Actions
+                    col1, col2 = st.columns(2)
+                    with col1:
+                        if st.button(f"🗑️ Delete", key=f"delete_{doc_id}"):
+                            if rag_handler.db.delete_document(doc_id):
+                                st.success(f"✅ Deleted document: {doc_id}")
+                                st.rerun()
+                            else:
+                                st.error(f"❌ Failed to delete document")
+                    
+                    with col2:
+                        # Export individual document
+                        doc_export = json.dumps(doc, indent=2, ensure_ascii=False)
+                        st.download_button(
+                            label="💾 Export",
+                            data=doc_export,
+                            file_name=f"{doc_id}.json",
+                            mime="application/json",
+                            key=f"export_{doc_id}"
+                        )
+        else:
+            st.info("📭 No documents in the knowledge base yet. Add some in the 'Add Knowledge' tab!")
+    
+    # Tab 4: Help
+    with tab4:
+        st.subheader("📖 RAG Knowledge Base Help")
+        
+        st.markdown("""
+        ### What is RAG?
+        
+        **RAG (Retrieval-Augmented Generation)** is a technique that enhances AI responses by:
+        1. **Retrieving** relevant information from a knowledge base
+        2. **Augmenting** the AI prompt with this context
+        3. **Generating** more accurate and informed responses
+        
+        ### How to Use
+        
+        #### Adding Knowledge
+        1. Go to the "Add Knowledge" tab
+        2. Either type content manually or upload a text file
+        3. Add optional metadata (source, category)
+        4. Click "Add to Knowledge Base"
+        
+        #### Querying
+        1. Go to the "Query" tab
+        2. Type your question
+        3. Adjust the context window (how many chunks to retrieve)
+        4. Click "Search" to get an answer
+        
+        #### Managing Documents
+        1. Go to the "Manage Documents" tab
+        2. View all stored documents
+        3. Filter/search documents
+        4. Delete or export individual documents
+        
+        ### Tips for Best Results
+        
+        - **Chunk Size**: Keep documents focused (500-2000 characters)
+        - **Metadata**: Use categories and sources for better organization
+        - **Context Window**: Start with 3 chunks, adjust based on results
+        - **Clear Content**: Write clear, well-structured knowledge entries
+        - **Regular Updates**: Keep your knowledge base current
+        
+        ### Technical Details
+        
+        - **Storage**: JSON-based database (rag_db.json)
+        - **Search**: Keyword-based relevance scoring
+        - **Chunking**: Automatic text splitting with overlap
+        - **Integration**: Works with Ollama models
+        
+        ### Example Queries
+        
+        ```
+        "What features does Aurora have?"
+        "How do I use the image generation?"
+        "What models are supported?"
+        "How does voice recognition work?"
+        ```
+        
+        ### Database Management
+        
+        - **Export**: Save entire database as JSON
+        - **Clear**: Remove all documents (use with caution!)
+        - **Backup**: Regular exports recommended
+        - **Import**: Batch import from text files
+        """)
+        
+        st.markdown("---")
+        st.info("💡 **Pro Tip**: Start by adding documentation, FAQs, or important information about your project to create a useful knowledge base!")
+
 def about_page():
     """About page"""
-    st.title("ℹ️ About Aurora")
+    st.title("ℹ️ About AURORA")
     
+    # Load AURORA system configuration
+    if AURORA_SYSTEM_AVAILABLE:
+        try:
+            aurora_system = get_aurora_system()
+            
+            # Display AURORA identity
+            project = aurora_system.config.get("project", {})
+            st.markdown(f"# {project.get('name', 'AURORA')}")
+            st.markdown(f"### {project.get('full_form', '')}")
+            st.markdown(f"**Version:** {project.get('version', '1.0')}")
+            st.markdown(f"*{project.get('attribution', '')}*")
+            st.markdown("---")
+            
+            # Display capabilities
+            st.markdown(aurora_system.format_capabilities_display())
+            
+            # Display team information
+            st.markdown(aurora_system.format_team_display())
+            
+            # Display operational policies
+            policies = aurora_system.get_policies()
+            if policies:
+                st.markdown("## 🛡️ Operational Policies")
+                for policy_name, policy_text in policies.items():
+                    st.markdown(f"**{policy_name.replace('_', ' ').title()}:** {policy_text}")
+                st.markdown("---")
+            
+        except Exception as e:
+            st.error(f"Error loading AURORA configuration: {e}")
+            # Fallback to basic info
+            st.markdown("## 🌅 Welcome to Aurora")
+    else:
+        st.markdown("## 🌅 Welcome to Aurora")
+    
+    # Technical features
     st.markdown("""
-    ## 🌅 Welcome to Aurora
-    
-    **Aurora** is an advanced AI assistant that combines multiple AI capabilities:
-    
-    ### ✨ Features
+    ## ✨ Features
     - **💬 Intelligent Chat**: Powered by Ollama models
     - **🎨 Image Generation**: Create multiple images using Stable Diffusion (default: 2 images)
-    - **🗣️ Voice Interaction**: Speech-to-text and text-to-speech with synchronized display
+    - **🎬 Video Generation**: Generate videos using AI models
+    - **� Knowledge Base (RAG)**: Retrieval-Augmented Generation for intelligent answers
+    - **�🗣️ Voice Interaction**: Speech-to-text and text-to-speech with synchronized display
     - **🔍 Web Search**: Wikipedia, Google, YouTube integration
-    - **🤖 AI-Powered Search**: Smart search using Ollama (NEW!)
-    - **📰 Topic News Search**: Search news by specific topics (NEW!)
+    - **🤖 AI-Powered Search**: Smart search using Ollama
+    - **📰 Topic News Search**: Search news by specific topics
     - **🌤️ Real-time Info**: Weather and news updates
+    - **🖥️ Agentic Control**: Basic and Vision-guided desktop automation
     
     ### 🎯 How to Use
     1. **Chat**: Select a model and start chatting
     2. **Voice**: Use the microphone for hands-free interaction
     3. **Images**: Switch to the Image Generation page, generate 1-10 images (default: 2)
-    4. **Commands**: Try "web search AI" or "smart search quantum computing"
+    4. **Videos**: Create AI-generated videos with custom prompts
+    5. **Knowledge Base**: Build and query your own RAG database
+    6. **Commands**: Try "web search AI" or "smart search quantum computing"
     
-    ### 🛠️ Technical Details
-    - **Version**: 3.5.0
+    ## 🛠️ Technical Stack
     - **Framework**: Streamlit + Python
-    - **AI Models**: Ollama (Local) + Stable Diffusion
+    - **AI Models**: Ollama (Local) + Stable Diffusion + Video Models
     - **Speech**: OpenAI Whisper + Bark TTS
+    - **RAG**: JSON-based knowledge database with vector search
     
-    ### 📚 Supported Commands
+    ## 📚 Supported Commands
     ```
     Wikipedia: "wikipedia [topic]"
     Weather: "weather in [city]"
@@ -2626,17 +3162,22 @@ def about_page():
     YouTube: "search youtube for [term]"
     News: "latest news"
     
-    NEW COMMANDS:
+    AI Features:
     AI Search: "web search [query]"
     Smart Search: "smart search [topic]"
     Topic News: "news about [topic]"
+    
+    Desktop Control:
+    Basic Agent: Toggle for keyboard/mouse control
+    Vision Agent: Toggle for autonomous visual tasks
     ```
     
     ### 🔧 System Requirements
     - Python 3.8+
     - Ollama (for chat functionality)
-    - GPU recommended (for image generation)
+    - GPU recommended (for image/video generation)
     - Microphone (for voice input)
+    - CUDA GPU (recommended for video generation)
     """)
     
     # System status
@@ -3157,6 +3698,7 @@ def main():
         create_nav_item("chat", "Chat", "💬"),
         create_nav_item("image", "Image Generation", "🎨"), 
         create_nav_item("video", "Video Generation", "🎬"),
+        create_nav_item("rag", "Knowledge Base", "📚"),
         create_nav_item("about", "About", "ℹ️")
     ]
     
@@ -3226,6 +3768,8 @@ def main():
         image_generation_page()
     elif current_page == "video":
         video_generation_page()
+    elif current_page == "rag":
+        rag_knowledge_base_page()
     elif current_page == "about":
         about_page()
 

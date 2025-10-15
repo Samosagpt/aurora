@@ -1,0 +1,49 @@
+# AURORA Documentation
+
+## What is AURORA?
+
+AURORA stands for "Agentic Unified multi-model Reasoning Orchestrator for Rapid One-shot Assistance". It is an advanced AI assistant developed by Karthikeyan Prasanna, Shyam, and Tejaji.
+
+## Key Features
+
+1. **Intelligent Chat** - Powered by Ollama models for natural conversations
+2. **Image Generation** - Create AI-generated images using Stable Diffusion
+3. **Video Generation** - Generate videos from text descriptions  
+4. **RAG System** - Retrieval-Augmented Generation with knowledge base
+5. **Voice Interaction** - Speech-to-text and text-to-speech capabilities
+6. **Web Integration** - Search Wikipedia, Google, YouTube, get weather and news
+7. **Desktop Automation** - Control your computer with AI agents
+
+## How to Use RAG
+
+The RAG (Retrieval-Augmented Generation) system allows AURORA to answer questions using your custom knowledge base:
+
+1. Enable RAG by checking the "Use RAG" checkbox in the sidebar
+2. Add documents to your knowledge base via the RAG Knowledge Base page
+3. Ask questions in the normal chat
+4. AURORA will automatically search the knowledge base and use relevant context
+5. Responses with RAG context show a 📚 indicator
+
+## System Requirements
+
+- Python 3.8+
+- Ollama for chat (download from ollama.ai)
+- 8GB RAM minimum (16GB recommended)
+- GPU recommended for image/video generation
+- Microphone for voice input (optional)
+
+## Team
+
+- **Karthikeyan Prasanna** - Lead Architect & AI Finetuning Manager
+- **Shyam** - Data Lead & Integration Coordinator
+- **Tejaji** - Software Lead & Infrastructure Developer
+
+## Troubleshooting
+
+**Chat not working?** Make sure Ollama is installed and running with `ollama serve`
+
+**RAG not responding?** Check that your knowledge base has documents added
+
+**Images not generating?** Verify GPU availability and Stable Diffusion installation
+
+For more help, check the About page in the application.

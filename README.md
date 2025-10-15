@@ -15,11 +15,13 @@ Aurora is a comprehensive AI assistant that combines text, voice, and image gene
 
 ### 🎯 Core Capabilities
 - **Multi-Modal AI Chat**: Text conversations using Ollama models
-- **📎 Attachment Support**: Upload and analyze images & PDFs with vision models
+- **� RAG Knowledge Base**: Retrieval-Augmented Generation for intelligent answers (NEW!)
+- **�📎 Attachment Support**: Upload and analyze images & PDFs with vision models
 - **🔍 AI-Powered Web Search**: Intelligent search using Ollama API
-- **🤖 Agentic AI Desktop Control**: Control your computer through natural language (NEW!)
+- **🤖 Agentic AI Desktop Control**: Control your computer through natural language
 - **Voice Interaction**: Speech-to-text and text-to-speech capabilities
 - **Image Generation**: Multiple Stable Diffusion models support
+- **🎬 Video Generation**: Create AI-generated videos from text prompts
 - **Web Search Integration**: Wikipedia, Google, YouTube search
 - **Real-time Information**: Weather and news updates
 - **Smart Intent Detection**: Automatic routing of user queries
