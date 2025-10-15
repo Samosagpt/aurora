@@ -32,6 +32,8 @@ class AgenticHandler:
             "type_text", "press_key",
             # Screen operations
             "take_screenshot", "locate_on_screen",
+            # OCR & GUI Recognition operations
+            "ocr_screen", "find_text_on_screen", "click_text", "recognize_gui_elements",
             # Application operations
             "open_application", "close_application", "list_windows", 
             "switch_window", "get_window_info",

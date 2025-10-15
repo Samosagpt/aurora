@@ -21,6 +21,7 @@ import re
 import gc
 import tempfile
 import logging
+import base64
 from pathlib import Path
 
 # Import production modules
@@ -127,9 +128,21 @@ except Exception as e:
 def configure_streamlit():
     """Configure Streamlit page settings"""
     try:
+        # Load page icon from logo file
+        logo_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '_assets', 'aurora_logo.jpg')
+        page_icon = "🤖"  # Default emoji fallback
+        
+        # Try to load the image for page icon
+        if os.path.exists(logo_path):
+            try:
+                from PIL import Image
+                page_icon = Image.open(logo_path)
+            except Exception:
+                pass  # Use emoji fallback if PIL fails
+        
         st.set_page_config(
             page_title="Aurora",
-            page_icon="🤖",
+            page_icon=page_icon,
             layout="wide",
             initial_sidebar_state="expanded",
             menu_items={
@@ -143,6 +156,20 @@ def configure_streamlit():
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 FILE_CSS = os.path.join(BASE_DIR, 'tertiary.css')
+
+def load_logo_as_base64():
+    """Load logo image and convert to base64 data URL"""
+    try:
+        logo_path = os.path.join(BASE_DIR, '_assets', 'aurora_logo.jpg')
+        if os.path.exists(logo_path):
+            with open(logo_path, 'rb') as f:
+                img_data = f.read()
+            b64_data = base64.b64encode(img_data).decode()
+            return f"data:image/jpeg;base64,{b64_data}"
+        return None
+    except Exception as e:
+        print(f"Error loading logo: {e}")
+        return None
 
 def load_css():
     """Load CSS file safely"""
@@ -1213,8 +1240,8 @@ def process_vision_input(prompt, model):
     print(f"🔍 DEBUG: Vision agent processing request: '{prompt}'")
     print(f"🔍 DEBUG: Original model: {model}")
     
-    # Force use of llava for vision tasks
-    vision_model = "llava:latest"
+    # Use qwen3-vl:235b-cloud for vision tasks (better vision capabilities)
+    vision_model = "qwen3-vl:235b-cloud"
     print(f"🔍 DEBUG: Using vision model: {vision_model}")
     
     # Add user message
@@ -3133,10 +3160,15 @@ def main():
         create_nav_item("about", "About", "ℹ️")
     ]
     
+    # Load logo image
+    logo_image = load_logo_as_base64()
+    
     # Navigation bar at the top
     selected_page = navbar(
         items=nav_items,
         key="main_navbar",
+        logo_image=logo_image,
+        logo_text="Aurora",
         selected=st.session_state.get("current_page", "chat")
     )
     
@@ -3150,8 +3182,24 @@ def main():
     # Add some spacing after navbar for better layout
     st.markdown("<div style='margin-top: 20px;'></div>", unsafe_allow_html=True)
     
-    # Sidebar without navigation menu - only quick actions
-    st.sidebar.title("🌅 Aurora")
+    # Sidebar with logo and quick actions
+    # Display logo in sidebar
+    logo_path = os.path.join(BASE_DIR, '_assets', 'aurora_logo.jpg')
+    if os.path.exists(logo_path):
+        try:
+            from PIL import Image
+            logo_img = Image.open(logo_path)
+            # Create columns for logo and title
+            col1, col2 = st.sidebar.columns([1, 2])
+            with col1:
+                st.image(logo_img, width=60)
+            with col2:
+                st.markdown("## Aurora")
+        except Exception:
+            st.sidebar.title("🌅 Aurora")
+    else:
+        st.sidebar.title("🌅 Aurora")
+    
     st.sidebar.markdown("---")
     st.sidebar.markdown("### 🔧 Quick Actions")
     

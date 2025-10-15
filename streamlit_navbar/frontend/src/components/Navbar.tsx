@@ -4,6 +4,7 @@ import { NavItem } from '../types.ts';
 interface NavbarProps {
   items: NavItem[];
   logoText: string;
+  logoImage?: string;
   selected?: string;
   sticky: boolean;
   style: React.CSSProperties;
@@ -13,6 +14,7 @@ interface NavbarProps {
 const Navbar: React.FC<NavbarProps> = ({
   items,
   logoText,
+  logoImage,
   selected,
   sticky,
   style,
@@ -24,7 +26,11 @@ const Navbar: React.FC<NavbarProps> = ({
       style={style}
     >
       <div className="navbar-logo">
-        {logoText}
+        {logoImage ? (
+          <img src={logoImage} alt="Logo" className="navbar-logo-image" />
+        ) : (
+          logoText
+        )}
       </div>
       
       <ul className="navbar-nav">

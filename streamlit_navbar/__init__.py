@@ -22,6 +22,7 @@ def navbar(
     items: List[Dict[str, Any]],
     key: Optional[str] = None,
     logo_text: str = "🌅 Aurora",
+    logo_image: Optional[str] = None,
     selected: Optional[str] = None,
     sticky: bool = True,
     style: Optional[Dict[str, str]] = None,
@@ -43,6 +44,9 @@ def navbar(
         
     logo_text : str, default "🌅 Aurora"
         Text to display as logo/brand.
+    
+    logo_image : str, optional
+        Path or URL to logo image. If provided, displays image instead of text.
         
     selected : str, optional
         Currently selected item id.
@@ -60,11 +64,11 @@ def navbar(
     """
     
     default_style = {
-        "background": "#0E1117",
-        "color": "white",
+        "background": "#0F172A",
+        "color": "#F1F5F9",
         "padding": "0.75rem 1rem",
-        "border-bottom": "1px solid rgba(255, 255, 255, 0.1)",
-        "box-shadow": "0 1px 3px rgba(0,0,0,0.3), 0 1px 2px rgba(0,0,0,0.5)",
+        "border-bottom": "1px solid rgba(59, 130, 246, 0.2)",
+        "box-shadow": "0 1px 3px rgba(107, 70, 193, 0.3), 0 1px 2px rgba(107, 70, 193, 0.5)",
         "z-index": "1000"
     }
     
@@ -74,6 +78,7 @@ def navbar(
     component_value = _component_func(
         items=items,
         logoText=logo_text,
+        logoImage=logo_image,
         selected=selected,
         sticky=sticky,
         style=default_style,

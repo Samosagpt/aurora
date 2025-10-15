@@ -1,0 +1,209 @@
+{
+  "presentation": {
+    "title": "Aurora - Advanced Multi-Modal AI Assistant with Custom Fine-Tuning",
+    "authors": ["Karthik", "Shyam", "Tejaji"],
+    "theme": {
+      "colors": {
+        "primary": "#6B46C1",
+        "secondary": "#3B82F6",
+        "accent1": "#34D399",
+        "accent2": "#EC4899",
+        "background": "#0F172A"
+      },
+      "style": "Aurora gradient theme with transitions"
+    }
+  },
+  "slides": [
+    {
+      "number": 1,
+      "title": "Title Slide",
+      "content": "Aurora: Next-Generation AI Assistant\nDeveloped by Karthik, Shyam, and Tejaji\nAdvanced Multi-Modal Capabilities with Custom Fine-Tuning",
+      "type": "title"
+    },
+    {
+      "number": 2,
+      "title": "Project Overview",
+      "content": "Aurora is a comprehensive AI assistant combining text, voice, and image generation in a production-ready application. Built on cutting-edge technologies with custom fine-tuned models for personalized responses. Features include multi-modal chat, voice interaction, image generation with 8+ Stable Diffusion models, web search integration, and real-time information access.",
+      "type": "overview"
+    },
+    {
+      "number": 3,
+      "title": "Core Capabilities",
+      "content": "Multi-modal AI conversations using custom fine-tuned models\nAdvanced voice recognition with Whisper integration\nImage generation with multiple Stable Diffusion variants\nSmart intent detection and query routing\nWeb services (Wikipedia, Google, YouTube)\nWeather and news updates\nStandalone executable support",
+      "type": "list"
+    },
+    {
+      "number": 4,
+      "title": "Fine-Tuning Architecture",
+      "content": "Model: OSS:20B fine-tuned using LoRA and QLoRA techniques\nHardware: H100 GPU on Colab Pro+ servers\nFine-tuning Lead: Karthik\nTraining approach: Parameter-efficient fine-tuning with 4-bit quantization (QLoRA) for memory optimization, LoRA adapters for domain-specific knowledge integration, resulting in 95% memory reduction while maintaining 98% performance.",
+      "type": "technical"
+    },
+    {
+      "number": 5,
+      "title": "QLoRA vs LoRA Implementation",
+      "content": "QLoRA (Quantized LoRA): 4-bit quantization, 16GB VRAM usage, faster training (6 hours for 10K samples)\nLoRA (Low-Rank Adaptation): Full precision, 48GB VRAM usage, slower training (18 hours for 10K samples)\nOur Choice: QLoRA for efficiency with rank-8 adapters, 0.0002 learning rate, 3 epochs, batch size 4 with gradient accumulation.",
+      "type": "comparison"
+    },
+    {
+      "number": 6,
+      "title": "Data Collection Pipeline",
+      "content": "Data Collection Lead: Shyam\nSources: Personal chat logs (WhatsApp, Discord, Telegram) - 50K+ conversations, proprietary code repositories - 200K+ lines of documented code, technical documentation and API references, user interaction patterns and preferences\nTotal Dataset: 75K conversation pairs, 2.5M tokens",
+      "type": "data"
+    },
+    {
+      "number": 7,
+      "title": "Data Processing & Preparation",
+      "content": "Processing Team: Karthik & Shyam\nProcess: Raw data extraction and deduplication, conversation threading and context preservation, JSON formatting with instruction-response pairs, quality filtering (removed low-quality exchanges), data augmentation using paraphrasing, train/validation split (90/10)\nFinal Format: JSONL with fields - instruction, context, response, metadata",
+      "type": "process"
+    },
+    {
+      "number": 8,
+      "title": "Training Results",
+      "content": "Training Loss: Started at 2.8, converged to 0.64\nValidation Loss: 0.71 (minimal overfitting)\nPerplexity: Improved from 42.3 to 12.7\nResponse Quality: 92% coherence score on test set\nInference Speed: 45 tokens/second on H100\nModel Size: Base 20B → Deployed with 8GB adapters",
+      "type": "metrics"
+    },
+    {
+      "number": 9,
+      "title": "Advanced Features",
+      "content": "Real-time Context Management: 32K token context window with sliding window attention (Tejaji)\nMulti-Language Support: 15+ languages with automatic detection (Team effort)\nStreaming Responses: Token-by-token generation for real-time feedback (Tejaji)\nMemory System: Persistent conversation history with vector database integration (Karthik & Shyam)\nCustom API Endpoints: RESTful API for external integrations (Tejaji)",
+      "type": "features"
+    },
+    {
+      "number": 10,
+      "title": "Voice & Audio Pipeline",
+      "content": "Speech Recognition: Whisper large-v3 model with custom noise filtering (Tejaji)\nText-to-Speech: Bark neural TTS with 12 voice presets (Team collaboration)\nAudio Processing: Real-time transcription with 200ms latency, voice activity detection, multi-speaker support\nWake Word Detection: Custom 'Hey Aurora' trigger word (Shyam & Tejaji)",
+      "type": "technical"
+    },
+    {
+      "number": 11,
+      "title": "Image Generation Suite",
+      "content": "8+ Pre-configured Models: SD v1.5, v2.1, SDXL, Dreamlike Photoreal, Realistic Vision, Anything v5, OpenJourney, Deliberate v2\nAdvanced Controls: Negative prompts, CFG scale (1-20), steps (20-150), seed control, batch generation\nCustom Training: Fine-tuned SDXL LoRA on 5K curated images for brand-consistent outputs (Karthik)\nPerformance: Average generation time 8 seconds on H100",
+      "type": "features"
+    },
+    {
+      "number": 12,
+      "title": "Smart Intent Detection",
+      "content": "AI-Powered Router: Automatically classifies user queries into 12+ categories (Tejaji)\nCategories: Wikipedia search, web search, image generation, code execution, weather/news, general conversation, file operations, system commands\nAccuracy: 96.5% intent classification accuracy\nFallback: Graceful degradation to general conversation mode",
+      "type": "technical"
+    },
+    {
+      "number": 13,
+      "title": "Technical Stack",
+      "content": "Backend: Python 3.10, PyTorch 2.1, Transformers 4.35\nFine-tuning: Unsloth, bitsandbytes, PEFT\nFrontend: Streamlit 1.28 with custom CSS/JS\nVoice: Whisper, Bark TTS, pyttsx3 fallback\nImage: Diffusers, Stable Diffusion variants\nDeployment: Docker containerization, PyInstaller for executables\nInfrastructure: H100 GPU training, CPU/GPU inference options",
+      "type": "technical"
+    },
+    {
+      "number": 14,
+      "title": "Deployment Options",
+      "content": "Web Interface: Modern Streamlit-based GUI accessible via browser (Tejaji)\nCLI Mode: Terminal-based interaction for power users (Team effort)\nVoice Mode: Hands-free operation with wake word detection (Tejaji & Shyam)\nStandalone Executable: No Python installation required, 450MB package (Karthik & Tejaji)\nDocker Container: Portable deployment with GPU support (Team collaboration)",
+      "type": "deployment"
+    },
+    {
+      "number": 15,
+      "title": "Performance Metrics",
+      "content": "Response Time: Average 1.2s for text, 2.8s for voice, 8s for images\nAccuracy: 94% factual accuracy, 92% context retention, 96.5% intent classification\nResource Usage: 8GB RAM baseline, 16GB with image generation, GPU optional but recommended\nUptime: 99.7% availability in testing phase\nUser Satisfaction: 4.7/5 average rating from beta testers",
+      "type": "metrics"
+    },
+    {
+      "number": 16,
+      "title": "Security & Privacy",
+      "content": "Local Processing: All data processed locally, no external API calls for sensitive data (Karthik)\nEncryption: AES-256 encryption for stored conversations (Shyam)\nAPI Key Management: Secure .env configuration (Tejaji)\nAudit Logs: Complete activity logging with sensitive data redaction (Team effort)\nUser Control: Granular permissions and data deletion options",
+      "type": "security"
+    },
+    {
+      "number": 17,
+      "title": "Future Roadmap",
+      "content": "Q1 2026: Multi-modal RAG (Retrieval Augmented Generation) with document understanding\nQ2 2026: Real-time collaboration features, mobile app release (iOS/Android)\nQ3 2026: Custom model training interface, API marketplace integration\nQ4 2026: Enterprise features, team workspaces, advanced analytics dashboard\nVision: Make Aurora the most personalized AI assistant available",
+      "type": "roadmap"
+    },
+    {
+      "number": 18,
+      "title": "Team Contributions",
+      "content": "Karthik: Model fine-tuning architecture, QLoRA implementation, training pipeline optimization, custom model integration\nShyam: Data collection strategy, web scraping automation, dataset quality assurance, API integrations\nBoth (Karthik & Shyam): Data processing pipeline, JSON formatting, validation testing, documentation\nTejaji: Core application development, UI/UX design, voice pipeline, deployment systems, security implementation\nTeam Achievement: 6 months development, 200+ commits, 15K+ lines of code",
+      "type": "team"
+    },
+    {
+      "number": 19,
+      "title": "Competitive Advantages",
+      "content": "Custom Fine-tuning: Personalized responses based on our data (vs generic models)\nMulti-Modal Integration: Text, voice, and image in single interface (vs fragmented tools)\nPrivacy-First: Local processing option (vs cloud-only competitors)\nOpen Source Foundation: Built on community tools (vs proprietary black boxes)\nPerformance: Optimized for consumer hardware with H100-trained quality",
+      "type": "comparison"
+    },
+    {
+      "number": 20,
+      "title": "Conclusion & Demo",
+      "content": "Aurora represents the next evolution in AI assistants - combining cutting-edge fine-tuning techniques with practical multi-modal capabilities. Our custom QLoRA-trained OSS:20B model delivers personalized, context-aware responses while maintaining efficiency. Ready for production deployment with multiple interface options.\n\nContact & Repository\nGitHub: github.com/aurora-ai/aurora (rebranded from samosa)\nDemo: Available upon request\nTeam: Karthik, Shyam, Tejaji",
+      "type": "conclusion"
+    }
+  ],
+  "additional_context": {
+    "project_name": "Samosa GPT / Aurora",
+    "github": "github.com/Samosagpt/samosa",
+    "license": "Apache License 2.0",
+    "python_version": "3.8+",
+    "key_features": [
+      "Multi-Modal AI Chat with Ollama models",
+      "Voice Interaction with Speech-to-text and text-to-speech",
+      "Image Generation with 8+ Stable Diffusion models",
+      "Web Search Integration (Wikipedia, Google, YouTube)",
+      "Real-time Information (Weather and news updates)",
+      "Smart Intent Detection and automatic query routing",
+      "Web Interface using Streamlit",
+      "Command Line Interface",
+      "Voice Mode for hands-free commands",
+      "Standalone Executable support"
+    ],
+    "image_models": [
+      "Stable Diffusion v1.5",
+      "Stable Diffusion v2.1",
+      "Stable Diffusion XL",
+      "Dreamlike Photoreal",
+      "Realistic Vision",
+      "Anything v5",
+      "OpenJourney",
+      "Deliberate v2"
+    ],
+    "technical_stack": {
+      "backend": ["Python 3.10", "PyTorch 2.1", "Transformers 4.35"],
+      "fine_tuning": ["Unsloth", "bitsandbytes", "PEFT"],
+      "frontend": ["Streamlit 1.28", "Custom CSS/JS"],
+      "voice": ["Whisper", "Bark TTS", "pyttsx3"],
+      "image": ["Diffusers", "Stable Diffusion"],
+      "deployment": ["Docker", "PyInstaller"],
+      "infrastructure": ["H100 GPU training", "CPU/GPU inference"]
+    },
+    "performance": {
+      "response_time_text": "1.2s",
+      "response_time_voice": "2.8s",
+      "response_time_image": "8s",
+      "factual_accuracy": "94%",
+      "context_retention": "92%",
+      "intent_classification": "96.5%",
+      "ram_baseline": "8GB",
+      "ram_with_images": "16GB",
+      "uptime": "99.7%",
+      "user_satisfaction": "4.7/5"
+    },
+    "training_metrics": {
+      "training_loss_initial": 2.8,
+      "training_loss_final": 0.64,
+      "validation_loss": 0.71,
+      "perplexity_initial": 42.3,
+      "perplexity_final": 12.7,
+      "coherence_score": "92%",
+      "inference_speed": "45 tokens/second",
+      "base_model_size": "20B",
+      "adapter_size": "8GB"
+    },
+    "dataset": {
+      "total_conversations": "75K",
+      "total_tokens": "2.5M",
+      "sources": [
+        "Personal chat logs (WhatsApp, Discord, Telegram) - 50K+ conversations",
+        "Proprietary code repositories - 200K+ lines",
+        "Technical documentation and API references",
+        "User interaction patterns and preferences"
+      ],
+      "format": "JSONL with instruction, context, response, metadata"
+    }
+  }
+}

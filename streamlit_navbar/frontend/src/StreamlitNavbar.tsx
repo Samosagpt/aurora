@@ -11,6 +11,7 @@ import './index.css';
 interface StreamlitArgs {
   items: NavItem[];
   logoText: string;
+  logoImage?: string;
   selected?: string;
   sticky: boolean;
   style: React.CSSProperties;
@@ -20,6 +21,7 @@ const StreamlitNavbar: React.FC<ComponentProps> = ({ args }) => {
   const {
     items = [],
     logoText = "🌅 Aurora",
+    logoImage,
     selected,
     sticky = true,
     style = {},
@@ -86,6 +88,7 @@ const StreamlitNavbar: React.FC<ComponentProps> = ({ args }) => {
       <Navbar
         items={items}
         logoText={logoText}
+        logoImage={logoImage}
         selected={selectedItem}
         sticky={sticky}
         style={style}
