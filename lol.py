@@ -193,7 +193,8 @@ def main():
         print(f" Opened: {presentation_url}")
         print(" Note: Please click on the browser window to focus it for keyboard controls")
         
-        time.sleep(5)
+        time.sleep(2)
+        pyautogui.press('f11')  # Start presentation mode
 
         if not os.path.exists(RAG_DB_PATH):
             print(f"[RAG] Warning: No database found at {RAG_DB_PATH}")
