@@ -1,30 +1,92 @@
-# 🤖 Aurora: Advanced AI Assistant with Multi-Modal Capabilities
+# 🤖 AURORA: Agentic Unified multi-model Reasoning Orchestrator for Rapid One-shot Assistance
 
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
-[![Version](https://img.shields.io/badge/version-1.0.0.0--pre-brightgreen.svg)](https://github.com/Samosagpt/samosa)
+[![Version](https://img.shields.io/badge/version-1.0-brightgreen.svg)](https://github.com/Samosagpt/aurora)
 [![License: CC BY-NC-ND 4.0](https://img.shields.io/badge/License-CC%20BY--NC--ND%204.0-green.svg)](LICENSE)
-[![License: CC BY-NC-ND 4.0](https://licensebuttons.net/l/by-nc-nd/4.0/80x15.png)](LICENSE)
+[![Ollama](https://img.shields.io/badge/Powered%20by-Ollama-orange.svg)](https://ollama.ai/)
 
-
+---
 
 ## 🌟 Overview
 
-Aurora is a comprehensive AI assistant that combines text, voice, and image generation capabilities in a single, production-ready application. Built with modern Python technologies, it offers multiple interaction modes and can be packaged as a standalone executable.
+**AURORA** is a next-generation AI assistant that seamlessly integrates multiple AI capabilities into one powerful platform. Built by **Karthikeyan Prasanna**, **Shyam**, and **Tejaji**, AURORA combines local LLM inference, computer vision, autonomous desktop control, RAG knowledge bases, and multimodal generation capabilities.
+
+### What Makes AURORA Unique?
+
+- **🧠 Local-First AI**: Powered by Ollama for complete privacy and control
+- **👁️ Vision-Enabled Autonomy**: See the screen, understand context, and act intelligently
+- **🤖 Desktop Control**: Execute tasks through natural language commands
+- **📚 Knowledge Base (RAG)**: Enhanced responses using custom knowledge bases
+- **🎨 Creative Generation**: Images and videos from text descriptions
+- **🗣️ Voice Interface**: Full speech-to-text and text-to-speech support
+- **📎 Multimodal Understanding**: Analyze images, PDFs, and documents
+
+---
 
 ## ✨ Key Features
 
-### 🎯 Core Capabilities
-- **Multi-Modal AI Chat**: Text conversations using Ollama models
-- **� RAG Knowledge Base**: Retrieval-Augmented Generation for intelligent answers (NEW!)
-- **�📎 Attachment Support**: Upload and analyze images & PDFs with vision models
-- **🔍 AI-Powered Web Search**: Intelligent search using Ollama API
-- **🤖 Agentic AI Desktop Control**: Control your computer through natural language
-- **Voice Interaction**: Speech-to-text and text-to-speech capabilities
-- **Image Generation**: Multiple Stable Diffusion models support
-- **🎬 Video Generation**: Create AI-generated videos from text prompts
-- **Web Search Integration**: Wikipedia, Google, YouTube search
-- **Real-time Information**: Weather and news updates
-- **Smart Intent Detection**: Automatic routing of user queries
+### 🎯 AI Chat & Intelligence
+
+- **🤖 Multi-Model Support**: Switch between Llama, Mistral, CodeLlama, and 50+ Ollama models
+- **💬 Streaming Responses**: Real-time text generation with think-tag support
+- **📚 RAG Knowledge Base**: JSON-based vector search for context-aware responses
+- **🧠 Smart Intent Detection**: Automatic routing between chat, web search, and tools
+- **💭 Reasoning Visualization**: Collapsible "thinking" sections for transparency
+
+### 👁️ Vision & Autonomy
+
+- **� Vision Agent**: Autonomous task execution with screen understanding
+- **📸 OCR Integration**: Text detection using Tesseract and EasyOCR
+- **🖱️ GUI Recognition**: Computer vision-based UI element detection
+- **🎯 Visual Feedback Loop**: Screenshot analysis → decision → action → verify
+- **⚡ Smart Pre-checks**: Context-aware initialization (e.g., auto-open websites)
+
+### 🤖 Desktop Control (Agentic AI)
+
+- **🖱️ Mouse Control**: Click, move, drag, scroll with pixel precision
+- **⌨️ Keyboard Automation**: Type text, press keys, execute shortcuts
+- **🪟 Window Management**: List, switch, focus, minimize, restore windows
+- **📂 File Operations**: Read, write, search, organize files and folders
+- **🔧 System Commands**: Execute shell commands with safety checks
+- **🌐 Application Control**: Open, close, manage applications and URLs
+
+### 📎 Multimodal Understanding
+
+- **🖼️ Image Analysis**: Vision models (LLaVA, BakLLaVA, Moondream) for image Q&A
+- **📄 PDF Processing**: Extract text from PDFs with PyPDF2 and pdf2image
+- **🎨 Multi-file Support**: Handle multiple images and PDFs simultaneously
+- **💡 Context Enhancement**: Automatic text extraction for better AI responses
+
+### 🎨 Creative Generation
+
+#### Image Generation
+- **8+ Stable Diffusion Models**: Pre-configured quality models
+- **Custom Model Support**: Load any Hugging Face diffusion model
+- **Advanced Parameters**: Guidance scale, steps, seeds, batch generation
+- **GPU Acceleration**: CUDA optimization with memory management
+- **Model Management**: Install, delete, and manage models from UI
+
+#### Video Generation
+- **Multiple T2V Models**: Zeroscope, ModelScope, AnimateDiff support
+- **Resolution Options**: From 256x256 to 1024x576
+- **Frame Control**: Adjust duration, FPS, and quality
+- **Memory Optimization**: CPU offloading for limited VRAM systems
+
+### 🗣️ Voice & Speech
+
+- **🎤 Speech Recognition**: OpenAI Whisper for accurate transcription
+- **🔊 Text-to-Speech**: Multiple engines (pyttsx3, Bark TTS, Edge TTS)
+- **🎭 Voice Presets**: 10+ Bark neural voice options
+- **🔇 Silence Detection**: Smart audio input handling
+- **💾 Audio Export**: Save generated speech as audio files
+
+### 🔍 Web & Information
+
+- **🌐 AI-Powered Search**: Ollama-enhanced web search
+- **📰 Smart News**: Topic-based news aggregation
+- **🌤️ Weather**: Real-time weather with AI fallback
+- **📚 Wikipedia**: Integrated Wikipedia search
+- **🎬 YouTube**: Video search integration
 
 ### 🖥️ Interface Options
 - **Web Interface**: Modern Streamlit-based GUI with drag-and-drop attachments
@@ -101,242 +163,164 @@ ollama pull llava
 "news about artificial intelligence"
 ```
 
+---
+
 ## 🚀 Quick Start
 
-### 📋 Prerequisites
-- Python 3.8 or higher
-- [Ollama](https://ollama.ai/) (for AI chat functionality)
-- Git (for cloning the repository)
+### Prerequisites
 
-> [!TIP]  
-> Refer to, our detailed guide on [SamosaGPT Documentation](https://samosagpt.vercel.app/docs#installation) for more info.
+- **Python 3.8+**
+- **[Ollama](https://ollama.ai/)** - For local LLM inference
+- **Git** - For cloning the repository
+- **Windows/Linux/macOS** - Cross-platform support
 
-### 🔧 Installation
+### Installation
 
 1. **Clone the Repository**
+
    ```bash
-   git clone https://github.com/Samosagpt/samosagpt.git
-   cd samosagpt
+   git clone https://github.com/Samosagpt/aurora.git
+   cd aurora
    ```
 
 2. **Run Setup Script**
+
    ```bash
    python setup.py
    ```
-   This will automatically:
-   - Check Python version compatibility
-   - Install all required dependencies
-   - Set up environment files
-   - Create necessary directories
-   - Test the installation
 
-3. **Configure Environment (Optional)**
-   ```bash
-   # Copy and edit .env file for API keys
-   cp .env.example .env
-   # Edit .env with your favorite editor
-   ```
+   This automatically:
+   - Checks Python version compatibility
+   - Installs all required dependencies
+   - Sets up environment files
+   - Creates necessary directories
+   - Tests the installation
 
-4. **Install Ollama Models**
+3. **Install Ollama Models**
+
    ```bash
    # Install recommended models
-   ollama pull llama2
+   ollama pull llama3.2
    ollama pull mistral
    ollama pull codellama
    
-   # For attachment support, install a vision model
+   # For vision support (image analysis)
    ollama pull llava
+   
+   # For vision agent (autonomous control)
+   ollama pull qwen3-vl:235b-cloud
    ```
 
-5. **Setup Attachment Support (Optional)**
-   ```bash
-   # Windows
-   setup_attachments.bat
-   
-   # Linux/Mac
-   ./setup_attachments.sh
-   
-   # See ATTACHMENT_GUIDE.md for details
-   ```
+4. **Optional: Advanced Features**
 
-6. **Install Bark TTS (Optional)**
    ```bash
-   # For high-quality text-to-speech
+   # For Tesseract OCR (desktop control)
+   # Windows: Download from https://github.com/UB-Mannheim/tesseract/wiki
+   # Linux: sudo apt-get install tesseract-ocr
+   # macOS: brew install tesseract
+   
+   # For high-quality TTS
    pip install git+https://github.com/suno-ai/bark.git
    ```
 
-### 🎮 Usage
+### Launch AURORA
 
 #### Web Interface (Recommended)
+
 ```bash
-start run_web.bat
-```
-Opens a modern web interface at `http://localhost:8501`
+# Windows
+run_web.bat
 
-#### Command Line Interface
+# Linux/macOS
+streamlit run streamlit_app.py
+```
+
+Opens at `http://localhost:8501`
+
+#### Console Mode
+
 ```bash
-start run_console.bat
-```
-Text-based interaction in terminal
+# Windows
+run_console.bat
 
-#### Voice Mode
-```bash
-start run_console.bat
-```
-Hands-free voice commands and responses
-
-#### Using Attachments
-1. Select a vision model (e.g., `llava`)
-2. Click **📎 Attachments** section
-3. Upload images or PDFs
-4. Ask questions about your attachments
-
-**Example queries:**
-- "What's in this image?"
-- "Summarize this PDF document"
-- "What does the chart in this image show?"
-
-See [QUICKSTART_ATTACHMENTS.md](QUICKSTART_ATTACHMENTS.md) for detailed guide.
-
-#### Using AI-Powered Web Search
-Try these new search commands:
-- `web search latest AI breakthroughs`
-- `smart search renewable energy`
-- `news about space exploration`
-- `search for Python best practices`
-
-**How it works:**
-- **Web Search**: Uses Ollama AI to provide comprehensive search results
-- **Smart Search**: Combines Wikipedia facts with AI analysis
-- **News Search**: Finds and summarizes news articles by topic
-
-## 🎨 Image Generation
-
-Samosa GPT includes a powerful image generation module with multiple models:
-
-### Available Models
-- **Stable Diffusion v1.5**: General purpose, reliable quality
-- **Stable Diffusion v2.1**: Enhanced coherence and detail
-- **Stable Diffusion XL**: High resolution, detailed outputs
-- **Dreamlike Photoreal**: Photorealistic image generation
-- **Realistic Vision**: Highly realistic results
-- **Anything v5**: Anime and artistic styles
-- **OpenJourney**: Midjourney-style artistic images
-- **Deliberate v2**: Balanced artistic approach
-
-### Features
-- Model selection and switching
-- Custom Hugging Face model support
-- Advanced generation parameters
-- Seed control for reproducibility
-- Batch generation capabilities
-- Image download functionality
-
-## 🗣️ Voice Capabilities
-
-### Speech Recognition
-- **Whisper Integration**: OpenAI's Whisper for accurate transcription
-- **Multiple Model Sizes**: From tiny to large models
-- **Noise Handling**: Advanced silence detection
-- **Real-time Processing**: Low-latency speech processing
-
-### Text-to-Speech
-- **Bark TTS**: High-quality neural voice synthesis
-- **Multiple Voices**: Various voice presets available
-- **Fallback Support**: pyttsx3 backup for compatibility
-- **Audio Export**: Save generated speech as audio files
-
-## ⚙️ Configuration
-
-### Environment Variables
-Create a `.env` file with your configuration:
-```env
-# Ollama Configuration (Required for AI search)
-OLLAMA_HOST=http://localhost:11434
-OLLAMA_API_KEY=your_ollama_api_key_here  # Your Ollama API key
-WEB_SEARCH_MODEL=samosagpt                # Model for AI web search
-ENABLE_AI_SEARCH=true                     # Enable AI-powered search
-
-# Optional API Keys (AI search is used by default)
-OPENWEATHER_API_KEY=                      # Optional, AI search used if not set
-NEWS_API_KEY=                             # Optional, AI search used if not set
-
-# Debug Mode
-DEBUG=false
+# Linux/macOS
+python main.py
 ```
 
-**Important:** Weather and news now use AI-powered web search by default. External API keys are optional!
+---
 
-**Get API Keys:**
-- **Ollama API Key:** Required for AI-powered search (your key is already configured)
-- OpenWeather API: https://openweathermap.org/api (OPTIONAL - AI search is default)
-- News API: https://newsapi.org/ (OPTIONAL - AI search is default)
+## 💡 Usage Examples
 
-### Model Configuration
-Edit `config.py` to customize:
-- Default models
-- File paths
-- API endpoints
-- Application settings
+### Basic Chat
 
-## � Project Structure
+```python
+from Generation import ollama_manager
 
-```
-samosa/
-├── app.py                     # Main application launcher
-├── config.py                  # Configuration management
-├── setup.py                   # Installation script
-├── requirements.txt           # Python dependencies
-├── .env.example              # Environment template
-├── 
-├── Core Modules/
-├── ├── Generation.py          # AI chat with Ollama
-├── ├── attachment_handler.py  # Image & PDF processing (NEW!)
-├── ├── image_gen.py          # Image generation
-├── ├── offline_sr_whisper.py # Speech recognition
-├── ├── offline_text2speech.py# Text-to-speech
-├── ├── prompthandler.py      # Query processing
-├── ├── ws.py                 # Web services
-├── └── logmanagement.py      # Logging system
-├── 
-├── Interface/
-├── ├── streamlit_app.py      # Web interface
-├── ├── tertiary.css          # Custom styling
-├── └── script.js             # JavaScript utilities
-├── 
-├── Build/
-├── ├── samosa.spec           # PyInstaller configuration
-├── ├── build.bat             # Windows build script
-├── └── build.sh              # Linux/macOS build script
-├── 
-└── Assets/
-    ├── _assets/              # Audio and media files
-    ├── logs/                 # Application logs
-    ├── ATTACHMENT_GUIDE.md   # Attachment documentation (NEW!)
-    ├── QUICKSTART_ATTACHMENTS.md # Quick start guide (NEW!)
-    └── test_attachments.py   # Test attachment support (NEW!)
+# Simple chat
+response = ollama_manager.chat_with_memory("Explain quantum computing", model_name="llama3.2")
+print(response)
+
+# Streaming chat
+for chunk in ollama_manager.chat_with_memory_stream("Write a poem about AI"):
+    print(chunk, end="", flush=True)
 ```
 
-## 🔧 Advanced Usage
+### Using RAG Knowledge Base
 
-### Custom Models
-Add your own Ollama models:
-```bash
-ollama pull your-custom-model
+```python
+from rag_handler import get_rag_handler
+
+# Initialize RAG
+rag = get_rag_handler()
+
+# Add knowledge
+rag.add_knowledge("AURORA is an advanced AI assistant created by Karthik, Shyam, and Tejaji")
+
+# Query
+result = rag.query("Who created AURORA?")
+print(result['answer'])
 ```
 
-### Custom Image Models
-Use any Hugging Face diffusion model:
-1. Enable "Use custom model ID" in the web interface
-2. Enter the model ID (e.g., `user/model-name`)
-3. The model will be downloaded automatically
+### Desktop Control
 
-### Using Attachments Programmatically
+```python
+from desktop_agent import desktop_agent
+
+# Open an application
+desktop_agent.open_application("notepad")
+
+# Type text
+desktop_agent.type_text("Hello from AURORA!")
+
+# Take screenshot
+result = desktop_agent.take_screenshot()
+print(f"Screenshot saved: {result['screenshot_path']}")
+
+# OCR screen
+ocr_result = desktop_agent.ocr_screen()
+print(f"Found {len(ocr_result['texts'])} text elements")
+```
+
+### Vision Agent (Autonomous)
+
+```python
+from vision_agent import execute_autonomous_task
+
+# Execute complex task
+result = execute_autonomous_task(
+    "Open GitHub and show me my pull requests",
+    model="qwen3-vl:235b-cloud",
+    max_steps=10
+)
+```
+
+### Attachment Analysis
+
 ```python
 from attachment_handler import attachment_handler
 from Generation import ollama_manager
 
-# Process an image
+# Process image
 image_data = attachment_handler.process_image("photo.jpg")
 
 # Format for Ollama
@@ -353,109 +337,284 @@ response = ollama_manager.chat_with_memory(
 )
 ```
 
-See [ATTACHMENT_GUIDE.md](ATTACHMENT_GUIDE.md) for complete API documentation.
+---
 
-### API Integration
-Configure external APIs for enhanced functionality:
-- OpenWeather API for weather data
-- News API for current news
-- Custom web services
+## 🏗️ Architecture
 
-## � Testing
+### Project Structure
 
-### Run Tests
-```bash
-python -m pytest tests/
-
-# Test attachment support
-python test_attachments.py
+```
+aurora/
+├── 🎯 Core AI Engine
+│   ├── Generation.py              # Ollama manager & chat interface
+│   ├── aurora_system.py          # Identity & system configuration
+│   ├── rag_handler.py            # RAG knowledge base
+│   └── prompthandler.py          # Intent detection & routing
+│
+├── 🤖 Agentic Capabilities
+│   ├── desktop_agent.py          # Desktop control tools
+│   ├── agentic_handler.py        # Agent orchestration
+│   └── vision_agent.py           # Autonomous vision-guided agent
+│
+├── 🎨 Generation Modules
+│   ├── image_gen.py              # Stable Diffusion interface
+│   ├── video_gen.py              # Text-to-video generation
+│   ├── image_model_manager.py    # Image model management
+│   └── video_model_manager.py    # Video model management
+│
+├── 🗣️ Voice & Speech
+│   ├── offline_sr_whisper.py     # Speech recognition (Whisper)
+│   └── offline_text2speech.py    # TTS (Bark, pyttsx3, Edge)
+│
+├── 📎 Multimodal Processing
+│   ├── attachment_handler.py     # Image & PDF processing
+│   └── PreTrainedResponses.py    # Response templates
+│
+├── 🖥️ User Interfaces
+│   ├── streamlit_app.py          # Main web interface
+│   ├── main.py                   # Console interface
+│   └── streamlit_navbar/         # Custom navbar component
+│
+├── ⚙️ Configuration & Utils
+│   ├── config.py / config_prod.py # Configuration management
+│   ├── hardware_optimizer.py     # Hardware detection & optimization
+│   ├── user_preferences.py       # User settings management
+│   ├── logmanagement.py          # Logging system
+│   ├── error_handler.py          # Error handling
+│   └── security.py               # Security & audit
+│
+├── 📦 Setup & Deployment
+│   ├── setup.py                  # Installation script
+│   ├── installer.py              # Executable builder
+│   ├── requirements.txt          # Python dependencies
+│   └── install_aurora.bat        # Windows installer
+│
+└── 📊 Data & Logs
+    ├── rag_db.json               # RAG knowledge base
+    ├── aurora_config.json        # System configuration
+    └── logs/                     # Execution logs & screenshots
 ```
 
-### Test Components
-```bash
-# Test speech recognition
-python -c "from offline_sr_whisper import speech_recognizer; print(speech_recognizer.test_microphone())"
+### Key Components
 
-# Test text-to-speech
-python -c "from offline_text2speech import tts_manager; print(tts_manager.test_engines())"
+#### 1. **OllamaManager** (`Generation.py`)
 
-# Test Ollama connection
-python -c "from Generation import ollama_manager; print(ollama_manager.get_available_models())"
+- Manages Ollama client connections
+- Handles model switching and streaming
+- Processes think-tags for reasoning visualization
+- Supports multimodal inputs (text + images)
+
+#### 2. **RAGHandler** (`rag_handler.py`)
+
+- JSON-based vector database
+- Keyword-based similarity search
+- Document chunking and retrieval
+- Ollama integration for answer generation
+
+#### 3. **DesktopAgent** (`desktop_agent.py`)
+
+- 20+ desktop control tools
+- OCR using Tesseract & EasyOCR
+- GUI element recognition
+- Window management (Win32 API)
+- File and system operations
+
+#### 4. **VisionAgent** (`vision_agent.py`)
+
+- Autonomous task execution
+- Screenshot analysis loop
+- Roadmap planning with LLMs
+- Context-aware decision making
+- Smart pre-checks (e.g., auto-open URLs)
+
+#### 5. **AgenticHandler** (`agentic_handler.py`)
+
+- Tool registry and execution
+- Natural language → tool calling
+- Multi-step workflow orchestration
+- Safety checks and validation
+
+---
+
+## � Configuration
+
+### Hardware Optimization
+
+AURORA automatically detects your hardware and optimizes settings:
+
+```python
+from hardware_optimizer import get_hardware_optimizer
+
+hw = get_hardware_optimizer()
+
+# Get optimized settings
+chat_settings = hw.get_chat_settings()
+image_settings = hw.get_image_settings()
+video_settings = hw.get_video_settings()
 ```
 
-## 📊 Performance Optimization
+### Environment Variables
 
-### GPU Acceleration
-- CUDA support for image generation
-- Automatic GPU detection and usage
-- Memory optimization for large models
+Create a `.env` file for API keys (optional):
 
-### Memory Management
-- Model caching and lazy loading
-- Automatic cleanup of temporary files
-- Configurable resource limits
+```env
+# Ollama Configuration
+OLLAMA_HOST=http://localhost:11434
+OLLAMA_API_KEY=your_api_key_here  # For remote Ollama instances
 
-## 🐛 Troubleshooting
+# Optional External APIs
+OPENWEATHER_API_KEY=your_key  # Weather data
+NEWS_API_KEY=your_key          # News aggregation
+
+# Debug Mode
+DEBUG=false
+```
+
+### User Preferences
+
+AURORA remembers your preferences:
+
+- Last used models (chat, image, video, TTS)
+- Streaming preference
+- Speech enablement
+- Voice presets
+
+Preferences are stored in `logs/user_preferences.json`
+
+---
+
+## �🐛 Troubleshooting
 
 ### Common Issues
 
-**Ollama Connection Failed**
+#### Ollama Connection Failed
+
 ```bash
 # Ensure Ollama is running
 ollama serve
+
+# Check if models are available
+ollama list
 ```
 
-**Audio Issues**
+#### OCR Not Working
+
 ```bash
-# Check audio devices
-python -c "import sounddevice; print(sounddevice.query_devices())"
+# Install Tesseract OCR
+# Windows: Download from https://github.com/UB-Mannheim/tesseract/wiki
+# Linux: sudo apt-get install tesseract-ocr
+# macOS: brew install tesseract
+
+# Verify installation
+tesseract --version
 ```
 
-**Missing Dependencies**
+#### GPU Not Detected
+
+```python
+import torch
+print(f"CUDA available: {torch.cuda.is_available()}")
+print(f"CUDA device: {torch.cuda.get_device_name(0) if torch.cuda.is_available() else 'None'}")
+```
+
+#### Module Import Errors
+
 ```bash
-# Reinstall requirements
+# Reinstall all dependencies
 pip install -r requirements.txt --force-reinstall
+
+# Or run setup again
+python setup.py
 ```
 
-## 🤝 Contributing
+---
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests for new functionality
-5. Submit a pull request
+## 👥 Team & Attribution
+
+### Core Team
+
+**AURORA** is developed by:
+
+1. **Karthikeyan Prasanna** - Lead Architect & AI Finetuning Manager
+   - System design and reasoning frameworks
+   - AI behavior orchestration
+   - Prompt architecture and tone alignment
+
+2. **Shyam** - Data Lead & Integration Coordinator
+   - Data collection and preprocessing
+   - Dataset structuring for training
+   - Cross-team coordination and documentation
+
+3. **Tejaji (P.S.N Tejaji)** - Software Lead & Infrastructure Developer
+   - AURORA software framework development
+   - AI component integration
+   - Performance optimization and deployment
+
+### Identity
+
+AURORA stands for **Agentic Unified multi-model Reasoning Orchestrator for Rapid One-shot Assistance** - an AI built to deliver fast, reliable, one-shot help across diverse tasks with an Alfred-like demeanor.
+
+---
 
 ## 📄 License
 
 This project is licensed under the **Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License (CC BY-NC-ND 4.0)**.
 
-### You are free to:
-- **Share** — copy and redistribute the material in any medium or format
+### Terms
 
-### Under the following terms:
-- **Attribution** — You must give appropriate credit, provide a link to the license, and indicate if changes were made
-- **NonCommercial** — You may not use the material for commercial purposes
-- **NoDerivatives** — If you remix, transform, or build upon the material, you may not distribute the modified material
+- ✅ **Share**: Copy and redistribute in any medium or format
+- ⚠️ **Attribution**: Give appropriate credit to creators (Karthik, Shyam, Tejaji)
+- ❌ **NonCommercial**: No commercial use without permission
+- ❌ **NoDerivatives**: No distribution of modified versions
 
-For the full license text, see [LICENSE](LICENSE) or visit [https://creativecommons.org/licenses/by-nc-nd/4.0/](https://creativecommons.org/licenses/by-nc-nd/4.0/)
-
-### Third-Party Components
-This software includes third-party components with their own licenses. Please refer to individual component documentation for their terms and conditions.
-
-## 🙏 Acknowledgments
-
-- OpenAI for Whisper speech recognition
-- Stability AI for Stable Diffusion models
-- Ollama team for local LLM support
-- Streamlit for the web framework
-- All open-source contributors
-
-## 📞 Support
-
-- 🐛 Issues: [GitHub Issues](https://github.com/Samosagpt/samosagpt/issues)
-- 💬 Discussions: [GitHub Discussions](https://github.com/Samosagpt/samosagpt/discussions)
-- 📧 Email: psntejaji@gmail.com
+Full license: [LICENSE](LICENSE) | [Creative Commons](https://creativecommons.org/licenses/by-nc-nd/4.0/)
 
 ---
 
-**Made with ❤️ by the P.S.N Tejaji**
+## 🙏 Acknowledgments
+
+### Technologies
+
+- **[Ollama](https://ollama.ai/)** - Local LLM inference engine
+- **[OpenAI Whisper](https://github.com/openai/whisper)** - Speech recognition
+- **[Stability AI](https://stability.ai/)** - Stable Diffusion models
+- **[Streamlit](https://streamlit.io/)** - Web framework
+- **[PyAutoGUI](https://pyautogui.readthedocs.io/)** - Desktop automation
+- **[Tesseract OCR](https://github.com/tesseract-ocr/tesseract)** - Text recognition
+
+### Open Source Libraries
+
+- diffusers, transformers, accelerate (Hugging Face)
+- torch, torchvision (PyTorch)
+- opencv-python, pytesseract, easyocr (Computer Vision)
+- pywin32, psutil (System integration)
+- pyttsx3, bark (Text-to-Speech)
+
+---
+
+## 📞 Support & Community
+
+- 🐛 **Issues**: [GitHub Issues](https://github.com/Samosagpt/aurora/issues)
+- 💬 **Discussions**: [GitHub Discussions](https://github.com/Samosagpt/aurora/discussions)
+- 📧 **Email**: psntejaji@gmail.com
+- 📚 **Documentation**: Check the `/logs` folder for detailed guides
+
+---
+
+## 🚀 Future Roadmap
+
+- [ ] Web-based RAG document upload interface
+- [ ] Multi-user support with authentication
+- [ ] Cloud deployment options (Docker, Kubernetes)
+- [ ] Mobile app (React Native/Flutter)
+- [ ] Browser extension for quick access
+- [ ] Plugin system for custom tools
+- [ ] Voice cloning for personalized TTS
+- [ ] Advanced scheduling and automation
+- [ ] Integration with more LLM providers
+
+---
+
+**Made with ❤️ by Karthikeyan Prasanna, Shyam, and Tejaji**
+
+*AURORA - Your intelligent companion for the age of AI*
