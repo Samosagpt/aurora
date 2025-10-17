@@ -9,7 +9,7 @@
 
 ## 🌟 Overview
 
-**AURORA** is a next-generation AI assistant that seamlessly integrates multiple AI capabilities into one powerful platform. Built by **Karthikeyan Prasanna**, **Shyam**, and **Tejaji**, AURORA combines local LLM inference, computer vision, autonomous desktop control, RAG knowledge bases, and multimodal generation capabilities.
+**AURORA** is a next-generation AI assistant that seamlessly integrates multiple AI capabilities into one powerful platform. AURORA combines local LLM inference, computer vision, autonomous desktop control, RAG knowledge bases, and multimodal generation capabilities.
 
 ### What Makes AURORA Unique?
 
