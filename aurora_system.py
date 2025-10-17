@@ -34,7 +34,7 @@ class AuroraSystem:
                 "name": "AURORA",
                 "full_form": "Agentic Unified multi-model Reasoning Orchestrator for Rapid One-shot Assistance",
                 "version": "1.0",
-                "creators": ["Karthikeyan Prasanna", "Shyam", "Tejaji"]
+                "creators": ["Aurora contributors"]
             }
         }
     

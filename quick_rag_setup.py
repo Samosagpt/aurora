@@ -22,17 +22,15 @@ def quick_setup():
     
     test_knowledge = [
         {
-            "content": """AURORA is an advanced AI assistant created by Karthikeyan Prasanna, Shyam, and Tejaji. 
+            "content": """AURORA is an advanced AI assistant created by the Aurora project contributors. 
             The name stands for Agentic Unified multi-model Reasoning Orchestrator for Rapid One-shot Assistance.
             AURORA combines multiple AI capabilities including chat, image generation, video generation, voice interaction, and web search.""",
             "source": "project_info",
             "category": "about_aurora"
         },
         {
-            "content": """The AURORA development team consists of three core members:
-            1. Karthikeyan Prasanna - Lead Architect & AI Finetuning Manager, responsible for system design and AI alignment
-            2. Shyam - Data Lead & Integration Coordinator, handles data engineering and coordination
-            3. Tejaji - Software Lead & Infrastructure Developer, develops the main software framework and integrations""",
+            "content": """The AURORA development team consists of core contributors:
+            1. Aurora project contributors - see CONTRIBUTORS.md or the project GitHub for details""",
             "source": "team_info",
             "category": "team"
         },

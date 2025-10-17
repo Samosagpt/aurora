@@ -3,7 +3,7 @@ import os
 import sys
 
 RESPONSES = {
-    'who are you': "I am Aurora, your virtual assistant. Built by Tejaji, Karthikeyan and Shyam",
+    'who are you': "I am Aurora, your virtual assistant. Built by the project contributors",
     'are you fine': "I am doing fine and always at your service.",
     'help': "I can search Wikipedia, open websites, play music, and more!",
     'introduce yourself': "__LAUNCH_PRESENTATION__",  # Special marker for presentation

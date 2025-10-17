@@ -1,7 +1,7 @@
 {
   "presentation": {
     "title": "Aurora - Advanced Multi-Modal AI Assistant with Custom Fine-Tuning",
-    "authors": ["Karthik", "Shyam", "Tejaji"],
+  "authors": ["Aurora contributors"],
     "theme": {
       "colors": {
         "primary": "#6B46C1",
@@ -17,7 +17,7 @@
     {
       "number": 1,
       "title": "Title Slide",
-      "content": "Aurora: Next-Generation AI Assistant\nDeveloped by Karthik, Shyam, and Tejaji\nAdvanced Multi-Modal Capabilities with Custom Fine-Tuning",
+  "content": "Aurora: Next-Generation AI Assistant\nDeveloped by the Aurora project contributors\nAdvanced Multi-Modal Capabilities with Custom Fine-Tuning",
       "type": "title"
     },
     {
@@ -35,7 +35,7 @@
     {
       "number": 4,
       "title": "Fine-Tuning Architecture",
-      "content": "Model: OSS:20B fine-tuned using LoRA and QLoRA techniques\nHardware: H100 GPU on Colab Pro+ servers\nFine-tuning Lead: Karthik\nTraining approach: Parameter-efficient fine-tuning with 4-bit quantization (QLoRA) for memory optimization, LoRA adapters for domain-specific knowledge integration, resulting in 95% memory reduction while maintaining 98% performance.",
+  "content": "Model: OSS:20B fine-tuned using LoRA and QLoRA techniques\nHardware: H100 GPU on Colab Pro+ servers\nFine-tuning Lead: Project team\nTraining approach: Parameter-efficient fine-tuning with 4-bit quantization (QLoRA) for memory optimization, LoRA adapters for domain-specific knowledge integration, resulting in significant memory reduction while maintaining high performance.",
       "type": "technical"
     },
     {
@@ -47,13 +47,13 @@
     {
       "number": 6,
       "title": "Data Collection Pipeline",
-      "content": "Data Collection Lead: Shyam\nSources: Personal chat logs (WhatsApp, Discord, Telegram) - 50K+ conversations, proprietary code repositories - 200K+ lines of documented code, technical documentation and API references, user interaction patterns and preferences\nTotal Dataset: 75K conversation pairs, 2.5M tokens",
+  "content": "Data Collection Lead: Project team\nSources: Public and consented datasets, documented code repositories, technical documentation and API references, user interaction patterns and preferences (with personal data excluded or anonymized)\nTotal Dataset: 75K conversation pairs, 2.5M tokens",
       "type": "data"
     },
     {
       "number": 7,
       "title": "Data Processing & Preparation",
-      "content": "Processing Team: Karthik & Shyam\nProcess: Raw data extraction and deduplication, conversation threading and context preservation, JSON formatting with instruction-response pairs, quality filtering (removed low-quality exchanges), data augmentation using paraphrasing, train/validation split (90/10)\nFinal Format: JSONL with fields - instruction, context, response, metadata",
+  "content": "Processing Team: Project team\nProcess: Raw data extraction and deduplication, conversation threading and context preservation, JSON formatting with instruction-response pairs, quality filtering, data augmentation using paraphrasing, train/validation split (90/10)\nFinal Format: JSONL with fields - instruction, context, response, metadata",
       "type": "process"
     },
     {
@@ -65,25 +65,25 @@
     {
       "number": 9,
       "title": "Advanced Features",
-      "content": "Real-time Context Management: 32K token context window with sliding window attention (Tejaji)\nMulti-Language Support: 15+ languages with automatic detection (Team effort)\nStreaming Responses: Token-by-token generation for real-time feedback (Tejaji)\nMemory System: Persistent conversation history with vector database integration (Karthik & Shyam)\nCustom API Endpoints: RESTful API for external integrations (Tejaji)",
+  "content": "Real-time Context Management: 32K token context window with sliding window attention\nMulti-Language Support: 15+ languages with automatic detection (Team effort)\nStreaming Responses: Token-by-token generation for real-time feedback\nMemory System: Persistent conversation history with vector database integration\nCustom API Endpoints: RESTful API for external integrations",
       "type": "features"
     },
     {
       "number": 10,
       "title": "Voice & Audio Pipeline",
-      "content": "Speech Recognition: Whisper large-v3 model with custom noise filtering (Tejaji)\nText-to-Speech: Bark neural TTS with 12 voice presets (Team collaboration)\nAudio Processing: Real-time transcription with 200ms latency, voice activity detection, multi-speaker support\nWake Word Detection: Custom 'Hey Aurora' trigger word (Shyam & Tejaji)",
+  "content": "Speech Recognition: Whisper large-v3 model with custom noise filtering\nText-to-Speech: Bark neural TTS with 12 voice presets (Team collaboration)\nAudio Processing: Real-time transcription with 200ms latency, voice activity detection, multi-speaker support\nWake Word Detection: Custom 'Hey Aurora' trigger word (project team)",
       "type": "technical"
     },
     {
       "number": 11,
       "title": "Image Generation Suite",
-      "content": "8+ Pre-configured Models: SD v1.5, v2.1, SDXL, Dreamlike Photoreal, Realistic Vision, Anything v5, OpenJourney, Deliberate v2\nAdvanced Controls: Negative prompts, CFG scale (1-20), steps (20-150), seed control, batch generation\nCustom Training: Fine-tuned SDXL LoRA on 5K curated images for brand-consistent outputs (Karthik)\nPerformance: Average generation time 8 seconds on H100",
+  "content": "8+ Pre-configured Models: SD v1.5, v2.1, SDXL, Dreamlike Photoreal, Realistic Vision, Anything v5, OpenJourney, Deliberate v2\nAdvanced Controls: Negative prompts, CFG scale (1-20), steps (20-150), seed control, batch generation\nCustom Training: Fine-tuned SDXL LoRA on 5K curated images for brand-consistent outputs\nPerformance: Average generation time 8 seconds on H100",
       "type": "features"
     },
     {
       "number": 12,
       "title": "Smart Intent Detection",
-      "content": "AI-Powered Router: Automatically classifies user queries into 12+ categories (Tejaji)\nCategories: Wikipedia search, web search, image generation, code execution, weather/news, general conversation, file operations, system commands\nAccuracy: 96.5% intent classification accuracy\nFallback: Graceful degradation to general conversation mode",
+  "content": "AI-Powered Router: Automatically classifies user queries into 12+ categories\nCategories: Wikipedia search, web search, image generation, code execution, weather/news, general conversation, file operations, system commands\nAccuracy: 96.5% intent classification accuracy\nFallback: Graceful degradation to general conversation mode",
       "type": "technical"
     },
     {
@@ -95,7 +95,7 @@
     {
       "number": 14,
       "title": "Deployment Options",
-      "content": "Web Interface: Modern Streamlit-based GUI accessible via browser (Tejaji)\nCLI Mode: Terminal-based interaction for power users (Team effort)\nVoice Mode: Hands-free operation with wake word detection (Tejaji & Shyam)\nStandalone Executable: No Python installation required, 450MB package (Karthik & Tejaji)\nDocker Container: Portable deployment with GPU support (Team collaboration)",
+  "content": "Web Interface: Modern Streamlit-based GUI accessible via browser\nCLI Mode: Terminal-based interaction for power users (Team effort)\nVoice Mode: Hands-free operation with wake word detection\nStandalone Executable: No Python installation required, 450MB package\nDocker Container: Portable deployment with GPU support (Team collaboration)",
       "type": "deployment"
     },
     {
@@ -107,7 +107,7 @@
     {
       "number": 16,
       "title": "Security & Privacy",
-      "content": "Local Processing: All data processed locally, no external API calls for sensitive data (Karthik)\nEncryption: AES-256 encryption for stored conversations (Shyam)\nAPI Key Management: Secure .env configuration (Tejaji)\nAudit Logs: Complete activity logging with sensitive data redaction (Team effort)\nUser Control: Granular permissions and data deletion options",
+  "content": "Local Processing: All data processed locally, no external API calls for sensitive data\nEncryption: AES-256 encryption for stored conversations\nAPI Key Management: Secure .env configuration\nAudit Logs: Complete activity logging with sensitive data redaction (Team effort)\nUser Control: Granular permissions and data deletion options",
       "type": "security"
     },
     {
@@ -119,7 +119,7 @@
     {
       "number": 18,
       "title": "Team Contributions",
-      "content": "Karthik: Model fine-tuning architecture, QLoRA implementation, training pipeline optimization, custom model integration\nShyam: Data collection strategy, web scraping automation, dataset quality assurance, API integrations\nBoth (Karthik & Shyam): Data processing pipeline, JSON formatting, validation testing, documentation\nTejaji: Core application development, UI/UX design, voice pipeline, deployment systems, security implementation\nTeam Achievement: 6 months development, 200+ commits, 15K+ lines of code",
+  "content": "Project contributors: Model fine-tuning architecture, data collection strategy, processing pipeline, core application development, UI/UX, voice pipeline, deployment systems, and security implementation\nTeam Achievement: 6 months development, 200+ commits, 15K+ lines of code",
       "type": "team"
     },
     {
@@ -131,13 +131,13 @@
     {
       "number": 20,
       "title": "Conclusion & Demo",
-      "content": "Aurora represents the next evolution in AI assistants - combining cutting-edge fine-tuning techniques with practical multi-modal capabilities. Our custom QLoRA-trained OSS:20B model delivers personalized, context-aware responses while maintaining efficiency. Ready for production deployment with multiple interface options.\n\nContact & Repository\nGitHub: github.com/aurora-ai/aurora (rebranded from samosa)\nDemo: Available upon request\nTeam: Karthik, Shyam, Tejaji",
+  "content": "Aurora represents the next evolution in AI assistants - combining cutting-edge fine-tuning techniques with practical multi-modal capabilities. Our custom QLoRA-trained OSS:20B model delivers personalized, context-aware responses while maintaining efficiency. Ready for production deployment with multiple interface options.\n\nContact & Repository\nGitHub: github.com/aurora-ai/aurora (rebranded from samosa)\nDemo: Available upon request\nTeam: Aurora project contributors",
       "type": "conclusion"
     }
   ],
   "additional_context": {
-    "project_name": "Samosa GPT / Aurora",
-    "github": "github.com/Samosagpt/samosa",
+  "project_name": "Aurora",
+  "github": "github.com/Samosagpt/aurora",
     "license": "Apache License 2.0",
     "python_version": "3.8+",
     "key_features": [
@@ -197,8 +197,8 @@
     "dataset": {
       "total_conversations": "75K",
       "total_tokens": "2.5M",
-      "sources": [
-        "Personal chat logs (WhatsApp, Discord, Telegram) - 50K+ conversations",
+  "sources": [
+  "Public and consented datasets; personal data excluded or anonymized",
         "Proprietary code repositories - 200K+ lines",
         "Technical documentation and API references",
         "User interaction patterns and preferences"

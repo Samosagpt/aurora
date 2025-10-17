@@ -2,7 +2,7 @@
 
 ## What is AURORA?
 
-AURORA stands for "Agentic Unified multi-model Reasoning Orchestrator for Rapid One-shot Assistance". It is an advanced AI assistant developed by Karthikeyan Prasanna, Shyam, and Tejaji.
+AURORA stands for "Agentic Unified multi-model Reasoning Orchestrator for Rapid One-shot Assistance". It is an advanced AI assistant developed by the Aurora project contributors.
 
 ## Key Features
 
@@ -34,9 +34,7 @@ The RAG (Retrieval-Augmented Generation) system allows AURORA to answer question
 
 ## Team
 
-- **Karthikeyan Prasanna** - Lead Architect & AI Finetuning Manager
-- **Shyam** - Data Lead & Integration Coordinator
-- **Tejaji** - Software Lead & Infrastructure Developer
+- Aurora project contributors (see CONTRIBUTORS.md or the GitHub project page for details)
 
 ## Troubleshooting
 

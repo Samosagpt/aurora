@@ -3,7 +3,7 @@
 
 !define APP_NAME "SamosaGPT"
 !define APP_VERSION "1.0.0"
-!define APP_PUBLISHER "P.S.N Tejaji"
+!define APP_PUBLISHER "Aurora Project"
 !define APP_URL "https://github.com/Samosagpt/samosagpt"
 !define APP_DESCRIPTION "Advanced AI Assistant with Multi-Modal Capabilities"
 
@@ -44,10 +44,10 @@ RequestExecutionLevel admin
 VIProductVersion "1.0.0.0"
 VIAddVersionKey "ProductName" "SamosaGPT"
 VIAddVersionKey "ProductVersion" "1.0.0.0"
-VIAddVersionKey "CompanyName" "P.S.N Tejaji"
+VIAddVersionKey "CompanyName" "Aurora Project"
 VIAddVersionKey "FileDescription" "Advanced AI Assistant with Multi-Modal Capabilities"
 VIAddVersionKey "FileVersion" "1.0.0.0"
-VIAddVersionKey "LegalCopyright" "© 2025 P.S.N Tejaji. Licensed under CC BY-NC-ND 4.0"
+VIAddVersionKey "LegalCopyright" "© 2025 Aurora Project. Licensed under CC BY-NC-ND 4.0"
 
 # Installation types
 InstType "Full Installation"

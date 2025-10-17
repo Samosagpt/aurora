@@ -274,7 +274,7 @@ from rag_handler import get_rag_handler
 rag = get_rag_handler()
 
 # Add knowledge
-rag.add_knowledge("AURORA is an advanced AI assistant created by Karthik, Shyam, and Tejaji")
+rag.add_knowledge("AURORA is an advanced AI assistant created by the Aurora project contributors")
 
 # Query
 result = rag.query("Who created AURORA?")
@@ -535,20 +535,7 @@ python setup.py
 
 **AURORA** is developed by:
 
-1. **Karthikeyan Prasanna** - Lead Architect & AI Finetuning Manager
-   - System design and reasoning frameworks
-   - AI behavior orchestration
-   - Prompt architecture and tone alignment
-
-2. **Shyam** - Data Lead & Integration Coordinator
-   - Data collection and preprocessing
-   - Dataset structuring for training
-   - Cross-team coordination and documentation
-
-3. **Tejaji (P.S.N Tejaji)** - Software Lead & Infrastructure Developer
-   - AURORA software framework development
-   - AI component integration
-   - Performance optimization and deployment
+1. Aurora project contributors (see CONTRIBUTORS.md or the GitHub project page for details)
 
 ### Identity
 
@@ -563,7 +550,7 @@ This project is licensed under the **Creative Commons Attribution-NonCommercial-
 ### Terms
 
 - ✅ **Share**: Copy and redistribute in any medium or format
-- ⚠️ **Attribution**: Give appropriate credit to creators (Karthik, Shyam, Tejaji)
+- ⚠️ **Attribution**: Give appropriate credit to the Aurora project contributors
 - ❌ **NonCommercial**: No commercial use without permission
 - ❌ **NoDerivatives**: No distribution of modified versions
 
@@ -596,7 +583,7 @@ Full license: [LICENSE](LICENSE) | [Creative Commons](https://creativecommons.or
 
 - 🐛 **Issues**: [GitHub Issues](https://github.com/Samosagpt/aurora/issues)
 - 💬 **Discussions**: [GitHub Discussions](https://github.com/Samosagpt/aurora/discussions)
-- 📧 **Email**: psntejaji@gmail.com
+For support or questions, please open an issue on the project's GitHub: https://github.com/Samosagpt/aurora/issues
 - 📚 **Documentation**: Check the `/logs` folder for detailed guides
 
 ---
@@ -615,6 +602,6 @@ Full license: [LICENSE](LICENSE) | [Creative Commons](https://creativecommons.or
 
 ---
 
-**Made with ❤️ by Karthikeyan Prasanna, Shyam, and Tejaji**
+**Made with ❤️ by the Aurora project contributors**
 
 *AURORA - Your intelligent companion for the age of AI*

@@ -67,7 +67,7 @@ class SamosaGPTInstaller:
         
         # License info
         license_label = tk.Label(title_frame, 
-                                text="Licensed under CC BY-NC-ND 4.0 | © 2025 P.S.N Tejaji",
+                                text="Licensed under CC BY-NC-ND 4.0 | © 2025 Aurora Project",
                                 font=("Arial", 8), fg="gray")
         license_label.pack(pady=(5, 0))
         
