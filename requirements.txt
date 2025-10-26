@@ -11,9 +11,9 @@ ollama>=0.1.7
 huggingface-hub>=0.19.0
 opencv-python>=2.2.6
 
-# Audio processing
-sounddevice>=0.4.6
-soundfile>=0.12.1
+# Audio processing - requires PortAudio system library
+sounddevice>=0.4.6; sys_platform == "win32"  # Requires portaudio system library
+soundfile>=0.12.1; sys_platform == "win32"  # Audio file I/O
 pyaudio>=0.2.14; sys_platform == "win32"  # Requires portaudio system library - Windows only
 scipy>=1.11.0
 # Note: Bark TTS must be installed separately from GitHub

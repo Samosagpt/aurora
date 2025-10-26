@@ -53,9 +53,23 @@ except ImportError:
     PRODUCTION_MODE = False
     logging.warning("Production modules not available, running in basic mode")
 
-# Import core modules
-from offline_sr_whisper import speech_recognition  
-from offline_text2speech import speak_text
+# Import core modules - audio modules may not be available on all platforms
+try:
+    from offline_sr_whisper import speech_recognition
+    SPEECH_RECOGNITION_AVAILABLE = True
+except (ImportError, OSError) as e:
+    SPEECH_RECOGNITION_AVAILABLE = False
+    logging.warning(f"Speech recognition not available: {e}")
+    speech_recognition = None
+
+try:
+    from offline_text2speech import speak_text
+    TEXT_TO_SPEECH_AVAILABLE = True
+except (ImportError, OSError) as e:
+    TEXT_TO_SPEECH_AVAILABLE = False
+    logging.warning(f"Text-to-speech not available: {e}")
+    speak_text = None
+
 import logmanagement as lm
 from user_preferences import get_preferences_manager
 from streamlit_markdown_select import markdown_select, create_option
