@@ -31,7 +31,10 @@ pdf2image>=1.16.3
 
 # Desktop control and automation
 pyautogui>=0.9.54
-pywin32>=306  # Windows-specific for window management
+# Windows-only: pywin32 is required for Win32 API integrations on Windows desktops.
+# Make this platform specific so Linux-based hosts (like Streamlit Cloud) won't try
+# to install it and fail due to missing wheels.
+pywin32>=306; sys_platform == "win32"
 keyboard>=0.13.5
 mouse>=0.7.1
 pytesseract>=0.3.10  # OCR for text detection in screenshots
