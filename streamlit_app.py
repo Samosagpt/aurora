@@ -15,8 +15,15 @@ except ImportError:
     KEYBOARD_AVAILABLE = False
     kb = None
 
-import sounddevice as sd
-import soundfile as sf
+try:
+    import sounddevice as sd
+    import soundfile as sf
+    AUDIO_AVAILABLE = True
+except ImportError:
+    AUDIO_AVAILABLE = False
+    sd = None
+    sf = None
+
 import os
 import threading
 import numpy as np
@@ -316,6 +323,9 @@ def get_ollama_models():
 
 def replay_audio(temp_wav_path):
     """Replay audio file"""
+    if not AUDIO_AVAILABLE:
+        st.warning("Audio playback not available on this platform.")
+        return
     if temp_wav_path and os.path.exists(temp_wav_path):
         data, samplerate = sf.read(temp_wav_path, dtype='float32')
         sd.play(data, samplerate)
@@ -3393,13 +3403,15 @@ def about_page():
         
         # Audio check
         try:
-            import sounddevice
-            devices = sounddevice.query_devices()
-            input_devices = [d for d in devices if d['max_input_channels'] > 0]
-            if input_devices:
-                st.success("✅ Audio Devices")
+            if AUDIO_AVAILABLE:
+                devices = sd.query_devices()
+                input_devices = [d for d in devices if d['max_input_channels'] > 0]
+                if input_devices:
+                    st.success("✅ Audio Devices")
+                else:
+                    st.warning("⚠️ Audio Devices")
             else:
-                st.warning("⚠️ Audio Devices")
+                st.warning("⚠️ Audio Devices (not available on this platform)")
         except:
             st.error("❌ Audio Devices")
         
