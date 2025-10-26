@@ -6,7 +6,15 @@ import Generation as gen
 import subprocess
 import json
 import time
-import keyboard as kb
+
+# Desktop automation imports - optional for cloud deployment
+try:
+    import keyboard as kb
+    KEYBOARD_AVAILABLE = True
+except ImportError:
+    KEYBOARD_AVAILABLE = False
+    kb = None
+
 import sounddevice as sd
 import soundfile as sf
 import os
@@ -21,7 +29,7 @@ try:
     PYAUDIO_AVAILABLE = True
 except ImportError:
     PYAUDIO_AVAILABLE = False
-    logging.warning("pyaudio not available - audio recording features may be limited")
+
 import re
 import gc
 import tempfile
