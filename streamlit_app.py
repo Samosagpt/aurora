@@ -16,7 +16,12 @@ import wave
 import io
 import sys
 import types
-import pyaudio
+try:
+    import pyaudio
+    PYAUDIO_AVAILABLE = True
+except ImportError:
+    PYAUDIO_AVAILABLE = False
+    logging.warning("pyaudio not available - audio recording features may be limited")
 import re
 import gc
 import tempfile
