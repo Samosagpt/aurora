@@ -1,0 +1,79 @@
+# Coverage.py configuration file
+# For more info: https://coverage.readthedocs.io/en/latest/config.html
+
+[run]
+# Source code directories
+source = .
+
+# Files to omit from coverage
+omit =
+    */tests/*
+    */test_*.py
+    */__pycache__/*
+    */venv/*
+    */env/*
+    */.venv/*
+    */build/*
+    */dist/*
+    */Release/*
+    */_assets/*
+    */logs/*
+    */streamlit_*/frontend/*
+    setup.py
+    setup_*.py
+    install_*.py
+    installer*.py
+    quick_rag_setup.py
+
+# Branch coverage
+branch = True
+
+# Parallel mode (for multi-process testing)
+parallel = True
+
+[report]
+# Precision for coverage percentages
+precision = 2
+
+# Show missing lines
+show_missing = True
+
+# Skip files with 100% coverage
+skip_covered = False
+
+# Exclude lines from coverage
+exclude_lines =
+    # Have to re-enable the standard pragma
+    pragma: no cover
+
+    # Don't complain about missing debug-only code:
+    def __repr__
+    if self\.debug
+
+    # Don't complain if tests don't hit defensive assertion code:
+    raise AssertionError
+    raise NotImplementedError
+
+    # Don't complain if non-runnable code isn't run:
+    if 0:
+    if False:
+    if __name__ == .__main__.:
+
+    # Don't complain about type checking code
+    if TYPE_CHECKING:
+    if typing.TYPE_CHECKING:
+
+    # Don't complain about abstract methods
+    @(abc\.)?abstractmethod
+    class .*\bProtocol\):
+
+# Fail if coverage is below threshold (optional)
+# fail_under = 80
+
+[html]
+# Directory for HTML report
+directory = htmlcov
+
+[xml]
+# File for XML report (for CI/CD)
+output = coverage.xml

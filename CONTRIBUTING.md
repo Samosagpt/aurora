@@ -73,55 +73,98 @@ Unsure where to begin? You can start by looking through `beginner` and `help-wan
 ### Local Setup
 
 1. **Clone the repository**
+
    ```bash
    git clone https://github.com/yourusername/aurora.git
    cd aurora
    ```
 
 2. **Create a virtual environment**
+
    ```bash
    python -m venv venv
    source venv/bin/activate  # On Windows: venv\Scripts\activate
    ```
 
 3. **Install dependencies**
+
    ```bash
    pip install -r requirements.txt
    ```
 
 4. **Set up environment variables**
+
    ```bash
    cp .env.example .env
    # Edit .env with your configuration
    ```
 
 5. **Install Ollama models**
+
    ```bash
    ollama pull llama3.2
    ollama pull llava  # For vision features
    ```
 
 6. **Run the application**
+
    ```bash
    # Web interface
    streamlit run streamlit_app.py
-   
+
    # Console interface
    python main.py
    ```
 
 ### Running Tests
 
+Aurora has a comprehensive testing infrastructure. For detailed information, see [TESTING.md](TESTING.md).
+
 ```bash
 # Run all tests
-python -m pytest
+pytest
+
+# Run with verbose output
+pytest -v
 
 # Run specific test file
-python -m pytest tests/test_generation.py
+pytest test_aurora_system.py
 
 # Run with coverage
-python -m pytest --cov=.
+pytest --cov=. --cov-report=html
+
+# Run only unit tests
+pytest -m unit
+
+# Run tests in parallel
+pytest -n auto
 ```
+
+**Quick test checklist before submitting PR:**
+
+```bash
+# 1. Run pre-commit hooks
+pre-commit run --all-files
+
+# 2. Run unit tests
+pytest -m "unit or not (integration or slow)"
+
+# 3. Check coverage
+pytest --cov=. --cov-report=term-missing
+
+# 4. Run full test suite (if time permits)
+pytest -v
+```
+
+For more details on:
+
+- Test categories and markers
+- Writing new tests
+- Using fixtures
+- Code coverage
+- CI/CD pipeline
+
+Please refer to **[TESTING.md](TESTING.md)**
 
 ## Coding Standards
 
@@ -154,21 +197,21 @@ from typing import Optional, List
 def process_user_input(text: str, model: Optional[str] = None) -> dict:
     """
     Process user input and generate a response.
-    
+
     Args:
         text: The user's input text
         model: Optional model name to use for generation
-        
+
     Returns:
         Dictionary containing the response and metadata
-        
+
     Raises:
         ValueError: If text is empty
         ConnectionError: If Ollama is not available
     """
     if not text.strip():
         raise ValueError("Input text cannot be empty")
-    
+
     # Implementation here
     pass
 ```
@@ -181,6 +224,7 @@ def process_user_input(text: str, model: Optional[str] = None) -> dict:
 - Reference issues and pull requests liberally
 
 **Format:**
+
 ```
 <type>(<scope>): <subject>
 
@@ -190,6 +234,7 @@ def process_user_input(text: str, model: Optional[str] = None) -> dict:
 ```
 
 **Types:**
+
 - `feat`: New feature
 - `fix`: Bug fix
 - `docs`: Documentation only
@@ -200,6 +245,7 @@ def process_user_input(text: str, model: Optional[str] = None) -> dict:
 - `chore`: Maintenance tasks
 
 **Example:**
+
 ```
 feat(vision): Add support for new vision models
 
@@ -228,7 +274,7 @@ When creating a PR, please include:
 - **Type of Change**: Bug fix, feature, documentation, etc.
 - **Testing**: How was this tested?
 - **Screenshots**: If applicable
-- **Checklist**: 
+- **Checklist**:
   - [ ] Code follows style guidelines
   - [ ] Self-reviewed code
   - [ ] Commented complex code
@@ -270,6 +316,7 @@ aurora/
 ## Recognition
 
 Contributors will be recognized in:
+
 - README.md (Contributors section)
 - CHANGELOG.md (for each release)
 - GitHub Contributors page

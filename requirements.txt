@@ -71,7 +71,19 @@ passlib>=1.7.4
 pytest>=7.4.0
 pytest-asyncio>=0.21.0
 pytest-cov>=4.1.0
+pytest-xdist>=3.3.0
+pytest-timeout>=2.1.0
+pytest-mock>=3.11.0
 coverage>=7.3.0
+
+# Code Quality Tools (optional, install with: pip install -r requirements-dev.txt)
+# black>=24.1.0
+# isort>=5.13.0
+# flake8>=7.0.0
+# pylint>=3.0.0
+# mypy>=1.8.0
+# bandit[toml]>=1.7.0
+# pre-commit>=3.5.0
 
 # Development and packaging
 pyinstaller>=6.0.0
