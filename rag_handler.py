@@ -170,7 +170,9 @@ class RAGDatabase:
                 
                 # Start new chunk with overlap
                 if overlap > 0 and current_parts:
-                    overlap_text = " ".join(current_parts)[-overlap:]
+                    # Get overlap text from the end of current chunk
+                    chunk_text_for_overlap = " ".join(current_parts)
+                    overlap_text = chunk_text_for_overlap[-overlap:] if len(chunk_text_for_overlap) >= overlap else chunk_text_for_overlap
                     current_parts = [overlap_text, sentence]
                     current_length = len(overlap_text) + sentence_len
                 else:

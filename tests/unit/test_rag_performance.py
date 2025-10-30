@@ -31,6 +31,7 @@ class TestRAGPerformance:
     def test_text_chunking_efficiency(self):
         """Test that text chunking uses efficient string concatenation"""
         db = RAGDatabase('/tmp/test_perf_chunking.json')
+        db.clear_database()
         
         # Create a large text to test chunking
         large_text = " ".join([f"Sentence {i}." for i in range(100)])
@@ -49,6 +50,7 @@ class TestRAGPerformance:
     def test_search_with_cached_patterns(self):
         """Test search uses pre-compiled patterns efficiently"""
         db = RAGDatabase('/tmp/test_perf_search.json')
+        db.clear_database()
         
         # Add test documents
         for i in range(10):
@@ -69,6 +71,9 @@ class TestRAGPerformance:
         """Test that search terminates early for low-score chunks"""
         db = RAGDatabase('/tmp/test_perf_early_term.json')
         
+        # Clear any existing data
+        db.clear_database()
+        
         # Add documents with varying relevance
         db.add_document("Completely irrelevant content about something else entirely")
         db.add_document("Test content with the exact keywords we want")
@@ -78,7 +83,7 @@ class TestRAGPerformance:
         results = db.search("test keywords", top_k=10, min_score=0.3)
         
         # Should only return relevant results
-        assert len(results) <= 1  # Only the relevant document should match
+        assert len(results) == 1, f"Expected 1 result, got {len(results)}: {results}"
     
     def test_list_join_vs_concatenation(self):
         """Test that list.join is used instead of string concatenation"""
