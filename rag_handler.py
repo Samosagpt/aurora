@@ -14,6 +14,10 @@ from datetime import datetime
 
 logger = logging.getLogger(__name__)
 
+# Pre-compile regex patterns for better performance
+WORD_PATTERN = re.compile(r'\w+')
+SENTENCE_SPLIT_PATTERN = re.compile(r'(?<=[.!?])\s+')
+
 
 class RAGDatabase:
     """JSON-based RAG database with vector search simulation"""
@@ -141,38 +145,45 @@ class RAGDatabase:
         Returns:
             List of chunk dictionaries
         """
-        # Split by sentences first
-        sentences = re.split(r'(?<=[.!?])\s+', text)
+        # Split by sentences first using pre-compiled pattern
+        sentences = SENTENCE_SPLIT_PATTERN.split(text)
         
         chunks = []
-        current_chunk = ""
+        current_parts = []  # Use list for efficient concatenation
+        current_length = 0
         chunk_idx = 0
         
         for sentence in sentences:
-            if len(current_chunk) + len(sentence) <= chunk_size:
-                current_chunk += sentence + " "
+            sentence_len = len(sentence) + 1  # +1 for space
+            if current_length + sentence_len <= chunk_size:
+                current_parts.append(sentence)
+                current_length += sentence_len
             else:
-                if current_chunk:
+                if current_parts:
+                    chunk_text = " ".join(current_parts).strip()
                     chunks.append({
                         "index": chunk_idx,
-                        "text": current_chunk.strip(),
-                        "length": len(current_chunk.strip())
+                        "text": chunk_text,
+                        "length": len(chunk_text)
                     })
                     chunk_idx += 1
                 
                 # Start new chunk with overlap
-                if overlap > 0 and current_chunk:
-                    overlap_text = current_chunk[-overlap:]
-                    current_chunk = overlap_text + sentence + " "
+                if overlap > 0 and current_parts:
+                    overlap_text = " ".join(current_parts)[-overlap:]
+                    current_parts = [overlap_text, sentence]
+                    current_length = len(overlap_text) + sentence_len
                 else:
-                    current_chunk = sentence + " "
+                    current_parts = [sentence]
+                    current_length = sentence_len
         
         # Add last chunk
-        if current_chunk:
+        if current_parts:
+            chunk_text = " ".join(current_parts).strip()
             chunks.append({
                 "index": chunk_idx,
-                "text": current_chunk.strip(),
-                "length": len(current_chunk.strip())
+                "text": chunk_text,
+                "length": len(chunk_text)
             })
         
         return chunks
@@ -189,9 +200,10 @@ class RAGDatabase:
             List of relevant documents with scores
         """
         try:
-            # Normalize query
+            # Normalize query (cache the lowercased version)
             query_lower = query.lower()
-            query_terms = set(re.findall(r'\w+', query_lower))
+            # Use pre-compiled regex pattern for better performance
+            query_terms = set(WORD_PATTERN.findall(query_lower))
             
             results = []
             
@@ -199,7 +211,8 @@ class RAGDatabase:
             for doc in self.data["documents"]:
                 for chunk in doc["chunks"]:
                     chunk_text_lower = chunk["text"].lower()
-                    chunk_terms = set(re.findall(r'\w+', chunk_text_lower))
+                    # Use pre-compiled regex pattern
+                    chunk_terms = set(WORD_PATTERN.findall(chunk_text_lower))
                     
                     # Calculate simple relevance score (term overlap)
                     common_terms = query_terms & chunk_terms
@@ -212,15 +225,17 @@ class RAGDatabase:
                     if query_lower in chunk_text_lower:
                         score += 0.5
                     
-                    # Check minimum score
-                    if score >= min_score:
-                        results.append({
-                            "doc_id": doc["id"],
-                            "chunk_index": chunk["index"],
-                            "content": chunk["text"],
-                            "score": score,
-                            "metadata": doc.get("metadata", {})
-                        })
+                    # Early termination for very low scores
+                    if score < min_score:
+                        continue
+                    
+                    results.append({
+                        "doc_id": doc["id"],
+                        "chunk_index": chunk["index"],
+                        "content": chunk["text"],
+                        "score": score,
+                        "metadata": doc.get("metadata", {})
+                    })
             
             # Sort by score (descending)
             results.sort(key=lambda x: x["score"], reverse=True)

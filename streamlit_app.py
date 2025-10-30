@@ -1067,15 +1067,17 @@ def process_user_input(prompt, model, attachments=None):
         model: Model to use for generation
         attachments: Optional list of attachment dictionaries
     """
-    # Format attachments for display
-    display_content = prompt
+    # Format attachments for display (use list for efficient concatenation)
+    display_parts = [prompt]
     if attachments and len(attachments) > 0:
-        display_content += f"\n\n📎 **Attachments:** {len(attachments)} file(s)"
+        display_parts.append(f"\n\n📎 **Attachments:** {len(attachments)} file(s)")
         for att in attachments:
             if att['type'] == 'image':
-                display_content += f"\n- 🖼️ {att['file_name']}"
+                display_parts.append(f"\n- 🖼️ {att['file_name']}")
             elif att['type'] == 'pdf':
-                display_content += f"\n- 📄 {att['file_name']}"
+                display_parts.append(f"\n- 📄 {att['file_name']}")
+    
+    display_content = "".join(display_parts)
     
     # Add user message
     st.session_state.messages.append({"role": "user", "content": display_content, "attachments": attachments})
@@ -1351,15 +1353,17 @@ def process_agentic_input(prompt, model, attachments=None):
     print(f"🔍 DEBUG: Model: {model}")
     print(f"🔍 DEBUG: Agentic handler available: {AGENTIC_HANDLER_AVAILABLE}")
     
-    # Format attachments for display
-    display_content = prompt
+    # Format attachments for display (use list for efficient concatenation)
+    display_parts = [prompt]
     if attachments and len(attachments) > 0:
-        display_content += f"\n\n📎 **Attachments:** {len(attachments)} file(s)"
+        display_parts.append(f"\n\n📎 **Attachments:** {len(attachments)} file(s)")
         for att in attachments:
             if att['type'] == 'image':
-                display_content += f"\n- 🖼️ {att['file_name']}"
+                display_parts.append(f"\n- 🖼️ {att['file_name']}")
             elif att['type'] == 'pdf':
-                display_content += f"\n- 📄 {att['file_name']}"
+                display_parts.append(f"\n- 📄 {att['file_name']}")
+    
+    display_content = "".join(display_parts)
     
     # Add user message
     st.session_state.messages.append({"role": "user", "content": display_content, "attachments": attachments})
@@ -3016,9 +3020,11 @@ def rag_knowledge_base_page():
                 content = doc['content']
                 metadata = doc.get('metadata', {})
                 
-                # Apply filter
-                if filter_text and filter_text.lower() not in doc_id.lower() and filter_text.lower() not in content.lower():
-                    continue
+                # Apply filter (cache lowercased filter value for efficiency)
+                if filter_text:
+                    filter_lower = filter_text.lower()
+                    if filter_lower not in doc_id.lower() and filter_lower not in content.lower():
+                        continue
                 
                 with st.expander(f"📄 {doc_id[:50]}..." if len(doc_id) > 50 else f"📄 {doc_id}"):
                     st.markdown(f"**Document ID:** `{doc_id}`")
