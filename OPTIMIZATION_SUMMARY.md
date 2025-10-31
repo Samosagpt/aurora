@@ -30,7 +30,24 @@ chunk_text = " ".join(current_parts)
 ```
 **Impact**: 30-40% faster chunking for large documents
 
-#### Issue 1.3: Unnecessary Processing
+#### Issue 1.3: Character-Based Overlap Breaking Semantic Coherence
+**Problem**: Overlap took last N characters, splitting words mid-word
+**Solution**: Overlap complete sentences instead of character slices
+```python
+# Take the last sentences that fit within the overlap size
+overlap_parts = []
+overlap_size = 0
+for part in reversed(current_parts):
+    part_len = len(part) + 1
+    if overlap_size + part_len <= overlap:
+        overlap_parts.insert(0, part)
+        overlap_size += part_len
+    else:
+        break
+```
+**Impact**: Better semantic coherence, no mid-word cuts
+
+#### Issue 1.4: Unnecessary Processing
 **Problem**: Continued processing chunks with low relevance scores
 **Solution**: Early termination with continue
 ```python

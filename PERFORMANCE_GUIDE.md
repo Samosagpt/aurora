@@ -24,7 +24,7 @@ SENTENCE_SPLIT_PATTERN = re.compile(r'(?<=[.!?])\s+')
 - Measured improvement: ~10-15% faster searches
 
 #### Efficient String Concatenation
-**Location**: `rag_handler.py` `_chunk_text()` method (lines 148-188)
+**Location**: `rag_handler.py` `_chunk_text()` method (lines 148-189)
 
 **Problem**: String concatenation using `+=` in loops creates many intermediate string objects, causing O(n²) performance.
 
@@ -47,6 +47,34 @@ chunk_text = " ".join(current_parts)  # Single join operation
 - O(n) instead of O(n²) performance for text chunking
 - Significantly faster for large documents
 - Measured improvement: ~30-40% faster chunking for 100+ sentences
+
+#### Sentence-Based Overlap (Semantic Coherence)
+**Location**: `rag_handler.py` `_chunk_text()` method (lines 171-189)
+
+**Problem**: Original implementation took the last N characters from chunks, which could split words mid-word, breaking semantic coherence.
+
+**Solution**: Overlap complete sentences instead of character slices:
+```python
+# Take the last sentences that fit within the overlap size
+overlap_parts = []
+overlap_size = 0
+for part in reversed(current_parts):
+    part_len = len(part) + 1  # +1 for space
+    if overlap_size + part_len <= overlap:
+        overlap_parts.insert(0, part)
+        overlap_size += part_len
+    else:
+        break
+
+# Start new chunk with overlap sentences + current sentence
+current_parts = overlap_parts + [sentence]
+```
+
+**Impact**:
+- Preserves word and sentence boundaries in overlaps
+- Better semantic coherence between chunks
+- More meaningful context for RAG retrieval
+- No mid-word cuts that could confuse search algorithms
 
 #### Early Termination in Search
 **Location**: `rag_handler.py` `search()` method (line 228)

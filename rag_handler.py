@@ -168,13 +168,22 @@ class RAGDatabase:
                     })
                     chunk_idx += 1
                 
-                # Start new chunk with overlap
+                # Start new chunk with overlap (keep last few sentences for context)
                 if overlap > 0 and current_parts:
-                    # Get overlap text from the end of current chunk
-                    chunk_text_for_overlap = " ".join(current_parts)
-                    overlap_text = chunk_text_for_overlap[-overlap:] if len(chunk_text_for_overlap) >= overlap else chunk_text_for_overlap
-                    current_parts = [overlap_text, sentence]
-                    current_length = len(overlap_text) + sentence_len
+                    # Take the last sentences that fit within the overlap size
+                    overlap_parts = []
+                    overlap_size = 0
+                    for part in reversed(current_parts):
+                        part_len = len(part) + 1  # +1 for space
+                        if overlap_size + part_len <= overlap:
+                            overlap_parts.insert(0, part)
+                            overlap_size += part_len
+                        else:
+                            break
+                    
+                    # Start new chunk with overlap sentences + current sentence
+                    current_parts = overlap_parts + [sentence]
+                    current_length = overlap_size + sentence_len
                 else:
                     current_parts = [sentence]
                     current_length = sentence_len

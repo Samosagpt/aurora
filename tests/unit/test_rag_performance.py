@@ -97,6 +97,37 @@ class TestRAGPerformance:
         # Verify chunks are correctly formed
         assert all('text' in chunk for chunk in chunks)
         assert all(len(chunk['text']) > 0 for chunk in chunks)
+    
+    def test_sentence_based_overlap(self):
+        """Test that overlap preserves complete sentences, not character slices"""
+        db = RAGDatabase('/tmp/test_sentence_overlap.json')
+        
+        # Create text with distinct sentences
+        text = "First sentence here. Second sentence here. Third sentence here. Fourth sentence here."
+        chunks = db._chunk_text(text, chunk_size=50, overlap=25)
+        
+        # Should have multiple chunks with overlap
+        assert len(chunks) >= 2, "Should create multiple chunks"
+        
+        # Check that overlapping chunks start with complete sentences
+        for i in range(1, len(chunks)):
+            chunk_text = chunks[i]['text']
+            # Each chunk should start with a capital letter (beginning of sentence)
+            # or be a complete sentence from the previous chunk
+            assert chunk_text[0].isupper() or chunk_text.startswith(' '), \
+                f"Chunk {i} should start with complete sentence: '{chunk_text[:30]}...'"
+            
+            # Verify no mid-word cuts by checking common overlap patterns
+            if i > 0:
+                prev_chunk = chunks[i-1]['text']
+                # If there's overlap, it should be complete sentences
+                words_curr = chunk_text.split()
+                words_prev = prev_chunk.split()
+                # First word of current chunk should appear in previous chunk as complete word
+                if words_curr:
+                    first_word = words_curr[0]
+                    assert first_word in words_prev, \
+                        f"Overlap should preserve complete words: '{first_word}' not in previous chunk"
 
 
 if __name__ == "__main__":
