@@ -602,6 +602,22 @@ For support or questions, please open an issue on the project's GitHub: https://
 
 ---
 
+---
+
+## 📘 Documentation
+
+To help contributors and users better understand AURORA’s architecture, configuration, and setup, refer to the following detailed guides:
+
+- [Architecture Overview](docs/ARCHITECTURE.md)
+- [Configuration Guide](docs/CONFIG.md)
+- [Installation Instructions](docs/INSTALLATION.md)
+- [API Reference](docs/API.md)
+- [AURORA Docs](docs/AURORA_DOCS.md)
+- [Contribution Guidelines](CONTRIBUTING.md)
+
+Each document is part of the comprehensive `/docs` directory added in this update for developer onboarding and project understanding.
+
+
 **Made with ❤️ by the Aurora project contributors**
 
 *AURORA - Your intelligent companion for the age of AI*

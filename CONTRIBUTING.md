@@ -327,4 +327,46 @@ Feel free to open an issue or discussion if you have questions about contributin
 
 ---
 
+---
+
+## 🧩 Development Workflow
+
+1. **Fork** the repository on GitHub.
+2. **Clone** your fork to your local machine:
+   ```bash
+   git clone https://github.com/<your-username>/aurora.git
+   cd aurora
+   ```
+ 3. ***Create a new branch for your contribution:***
+
+```bash
+ git checkout -b feature/docs-update
+ Make your changes in the appropriate files under /docs or relevant directories.
+```
+
+4. ***Commit your changes with a meaningful message:***
+
+```bash
+git commit -m "docs: add comprehensive markdown documentation"
+Push your branch to your forked repository:
+git push origin feature/docs-update
+```
+
+5.***Open a Pull Request (PR) on the main repository and describe your changes clearly.***
+
+Wait for maintainers to review your PR and make updates if required.
+
+
+## 📝 Documentation Standards
+
+- All documentation must be written in Markdown (.md) format.
+- Place all documentation files inside the /docs directory.
+- Link all major documentation (like AURORA_DOCS.md, ARCHITECTURE.md, CONFIG.md, INSTALLATION.md, and API.md) from the main README.md.
+- Use clear headings, bullet points, and code blocks for better readability.
+- Keep file names in UPPERCASE.md format for consistency.
+- Include visuals or diagrams (if applicable) under /docs/assets/.
+- Review and proofread content for grammar, clarity, and correctness before committing.
+- Follow commit naming conventions like:
+git commit -m "docs: improve architecture documentation"
+
 **Thank you for contributing to AURORA!** 🎉
